@@ -1,5 +1,8 @@
 import React, { useState, useRef } from "react";
 
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
+
 import { InputGroup, } from 'rsuite'
 import { BsFillCameraFill, BsSkipBackwardCircle } from 'react-icons/bs'
 import { CgArrowsExchangeV } from 'react-icons/cg'
@@ -8,15 +11,28 @@ import { GrStatusGood } from 'react-icons/gr'
 
 const CameraComponent = ({ close }) => {
 
-  const camera = useRef(null);
-  const [numberOfCameras, setNumberOfCameras] = useState(0);
-  const [image, setImage] = useState(null);
+    const isFullscreen = false;
+    const [dataUri, setDataUri] = useState('');
+
+    function handleTakePhotoAnimationDone (dataUri) {
+      console.log('takePhoto');
+      setDataUri(dataUri);
+    }
 
   return (
     
 
     <div style={{ width: 200, height: 600 }}>
-        <div>Camera</div>
+        <div>
+        {
+            (dataUri)
+            ? <img src={dataUri} ></img>
+            : <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone}
+                isFullscreen={isFullscreen}
+            />
+        }
+        </div>
+        
         { /*
             !image
             ?  <div>
