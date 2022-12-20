@@ -26,12 +26,12 @@ const CameraComponent = ({ close }) => {
   return (
     
 
-    <div style={{ width: 200, height: 600 }}>
+    <div className="w-100" style={{ height: 600 }}>
         <div>
         {
             image
             ? 
-                <div style={{ width: 200, height: 600 }}>
+                <div className="w-100" style={{ height: 600 }}>
                     <img style={{ width: 200, height: 600 }} className="w-100" src={image} alt='Image preview' />
                     <div className="w-100 fixed-bottom" style={{ height: 100, zIndex: 1, opacity: 0.4 }}>
                         <div className="w-100 d-flex justify-content-center align-items-center">
@@ -41,9 +41,10 @@ const CameraComponent = ({ close }) => {
                             </div>
                     </div>
                 </div>
-            : <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone}
-                isFullscreen={isFullscreen}
-            />
+            : 
+            <div className="w-100" style={{ height: 600 }}>
+                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
+            </div>
         }
         </div>
         
