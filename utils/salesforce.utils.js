@@ -2,7 +2,7 @@ const jsforce = require('jsforce');
 const conn = new jsforce.Connection();
 
 const creds = {
-    login : '3rd.orest@gmail.com',
+    login : '3rd.orest@gmail.com.partia1',
     password : 'Myrooom2020!'
 }
 
