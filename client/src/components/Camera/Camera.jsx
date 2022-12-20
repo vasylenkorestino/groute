@@ -3,6 +3,8 @@ import React, { useState, useRef } from "react";
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
+import ModalWindow from '../Modal/Modal'
+
 import { InputGroup, } from 'rsuite'
 import { BsFillCameraFill, BsSkipBackwardCircle } from 'react-icons/bs'
 import { CgArrowsExchangeV } from 'react-icons/cg'
@@ -42,9 +44,7 @@ const CameraComponent = ({ close, setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <div style={{ width: 640, height: 600 }}>
-                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealResolution = {{ width: 640, height: 480 }} />
-            </div>
+            <ModalWindow show={ true } close={ handleTakePhotoAnimationDone } context={ <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} /> } />
         }
         </div>
         
