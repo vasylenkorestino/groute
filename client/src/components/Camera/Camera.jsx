@@ -1,23 +1,24 @@
 import React, { useState, useRef } from "react";
-/*
+
 import { Camera } from "react-camera-pro";
 
 import { InputGroup, } from 'rsuite'
 import { BsFillCameraFill, BsSkipBackwardCircle } from 'react-icons/bs'
 import { CgArrowsExchangeV } from 'react-icons/cg'
 import { GrStatusGood } from 'react-icons/gr'
-*/
+
 
 const CameraComponent = ({ close }) => {
-/*
+
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [image, setImage] = useState(null);
-*/
+
   return (
-    <div>Camera</div>
-    /*
+    
+
     <div style={{ width: 200, height: 600 }}>
+        <div>Camera</div>
         { 
             !image
             ?  <div>
@@ -56,7 +57,7 @@ const CameraComponent = ({ close }) => {
                 </div>
         }
     </div>
-    */
+ 
 
   );
 }
