@@ -9,12 +9,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json({ extended: true} ))
 
-app.use(express.static(path.join(__dirname, 'client/build')));
-
+//app.use(express.static(path.join(__dirname, 'client/build')));
+/*
 app.use('/api/auth', require('./routes/auth.route'))
 app.use('/api/users', require('./routes/users.route'))
 app.use('/api/salesforce', require('./routes/salesforce.route'))
-
+*/
 app.get('*', (req, res) => {
   //res.sendFile(path.join(__dirname + '/client/build/index.html'));
   res.send('test')
