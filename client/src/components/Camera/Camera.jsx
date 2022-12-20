@@ -33,7 +33,7 @@ const CameraComponent = ({ setImageUrl }) => {
         {
             image
             ? 
-                <div className="w-100" style={{ height: 600 }}>
+                <div style={{ height: 600 }}>
                     <img style={{ height: 600 }} className="w-100" src={image} alt='Image preview' />
                     <div className="w-100 fixed-bottom" style={{ height: 100, zIndex: 1, opacity: 0.4 }}>
                         <div className="w-100 d-flex justify-content-center align-items-center">
@@ -44,7 +44,7 @@ const CameraComponent = ({ setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
+            <Camera className="w-100" onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
         }
         </div>
         
