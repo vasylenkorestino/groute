@@ -29,10 +29,10 @@ const RouteCard = ({ route, endpoint, columns }) => {
             <ModalWindow show={ show } close={ handleClose } context={ < InputForm endpoint={ endpoint } columns={ columns } close={ handleClose } title={ 'Complete Route' } record={ route } mode='salesforce' /> } />
             <Panel>
                 <Row className="show-grid d-flex justify-content-center align-items-center">
-                    <Col xs={8} className='d-flex justify-content-center align-items-center'>
+                    <Col xs={5} className='d-flex justify-content-center align-items-center'>
                         <IconButton className='d-flex justify-content-center align-items-center' style={{ width: 100, height: 100 }} circle size='lg' appearance="subtle" icon={<SiGooglemaps color="blue" style={{ width: 30, height: 30 }} />} href={ route.link } target="_blank"></IconButton>
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={14}>
                         <div className="d-flex flex-column align-items-center">
                             <div>
                                 <div className="display-4"> { route.Account_Name__c } </div>
@@ -43,7 +43,7 @@ const RouteCard = ({ route, endpoint, columns }) => {
                                 <div className="lead mb-0"> Rebate: { route.Rebate__c } </div>
                             </div>
                         </div></Col>
-                    <Col xs={8} className='d-flex justify-content-center align-items-center'>
+                    <Col xs={5} className='d-flex justify-content-center align-items-center'>
                         { 
                             !(route.style === 'bg-serviced') && 
                             <IconButton className='d-flex justify-content-center align-items-center' style={{ width: 100, height: 100 }} circle color="green" appearance="subtle" icon={<CheckOutlineIcon color="green" style={{ width: 30, height: 30 }} />} onClick={ () => handleEdit(route) }></IconButton>

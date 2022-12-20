@@ -11,7 +11,7 @@ import { GrStatusGood } from 'react-icons/gr'
 
 const CameraComponent = ({ close, setImageUrl }) => {
 
-    const isFullscreen = true;
+    const isFullscreen = false;
     const [image, setImage] = useState('');
 
     function handleTakePhotoAnimationDone (dataUri) {
@@ -20,7 +20,7 @@ const CameraComponent = ({ close, setImageUrl }) => {
     }
 
     const uploadPhoto = () => {
-
+        setImageUrl(image)
     }
 
   return (
@@ -42,8 +42,8 @@ const CameraComponent = ({ close, setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <div className="w-100" style={{ height: 600 }}>
-                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealResolution = {{width: 640, height: 480}} />
+            <div style={{ width: 640, height: 600 }}>
+                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealResolution = {{ width: 640, height: 480 }} />
             </div>
         }
         </div>

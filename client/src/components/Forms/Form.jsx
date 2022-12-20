@@ -63,6 +63,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
     const [imageUrl, setImageUrl] = useState(null);
     const handleChangeCameraView = () => setShowCamera(!showCamera)
 
+    const handleSetImageUrl = (url) => {
+        setImageUrl(url)
+    }
+
+
     const getCameraInput = (column) => {
         return (
             <>
@@ -73,7 +78,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                     :
                     <>
                         <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill /></InputGroup.Button>
-                        <ModalWindow  show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ setImageUrl }/> }/>
+                        <ModalWindow  show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl }/> }/>
                     </>
                 }
             </>
