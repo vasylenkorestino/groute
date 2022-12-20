@@ -1,0 +1,22 @@
+.rs-picker-menu.rs-picker-check-menu, .rs-picker-menu.rs-picker-select-menu {
+    z-index: 1111 !important;
+}
+
+.modal-dialog {
+    margin-top: 200px !important;
+}
+
+.modal-content {
+    background-color: #0f131a !important;
+    border-color:#9ecaed;
+    box-shadow:0 0 20px #9ecaed;
+}
+
+.btn-close {
+    box-shadow:0 0 10px #9ecaed;
+    background-color:#9ecaed;
+}
+
+.btn {
+    box-shadow:0 0 10px #9ecaed;
+}

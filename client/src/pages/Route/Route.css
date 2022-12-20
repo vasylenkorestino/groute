@@ -1,0 +1,10 @@
+.bg-unserviced {
+    background: linear-gradient(to right, #0f131a, #6f0000 );
+}
+
+.bg-serviced {
+    background: linear-gradient(to right, #0f131a, #56ab2f);
+    text-align: right;
+}
+
+.bg-empty {}
