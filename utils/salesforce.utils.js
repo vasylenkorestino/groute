@@ -1,5 +1,7 @@
 const jsforce = require('jsforce');
-const conn = new jsforce.Connection();
+const conn = new jsforce.Connection({
+    loginUrl : 'https://test.salesforce.com'
+})
 
 const creds = {
     login : '3rd.orest@gmail.com.partia1',
