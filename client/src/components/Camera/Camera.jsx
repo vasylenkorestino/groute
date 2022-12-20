@@ -44,7 +44,7 @@ const CameraComponent = ({ close, setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <ModalWindow show={ true } close={ handleTakePhotoAnimationDone } context={ <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} /> } />
+            <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} isMaxResolution={ true } />
         }
         </div>
         
