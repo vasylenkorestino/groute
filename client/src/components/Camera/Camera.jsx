@@ -11,7 +11,7 @@ import { CgArrowsExchangeV } from 'react-icons/cg'
 import { GrStatusGood } from 'react-icons/gr'
 
 
-const CameraComponent = ({ close, setImageUrl }) => {
+const CameraComponent = ({ setImageUrl }) => {
 
     const isFullscreen = false;
     const [image, setImage] = useState('');
@@ -44,7 +44,7 @@ const CameraComponent = ({ close, setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} isMaxResolution={ true } />
+            <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
         }
         </div>
         
