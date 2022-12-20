@@ -60,15 +60,22 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
     }
 
     const [showCamera, setShowCamera] = useState(false);
+    const [imageUrl, setImageUrl] = useState(null);
     const handleChangeCameraView = () => setShowCamera(!showCamera)
 
     const getCameraInput = (column) => {
         return (
             <>
-                <InputGroup.Button onClick={handleChangeCameraView}>
-                    <BsFillCameraFill />
-                </InputGroup.Button>
-                <ModalWindow  show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera /> }/>
+                { 
+                    imageUrl 
+                    ?
+                    <img style={{ height: 600 }} className="w-100" src={imageUrl} />
+                    :
+                    <>
+                        <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill /></InputGroup.Button>
+                        <ModalWindow  show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ setImageUrl }/> }/>
+                    </>
+                }
             </>
         )
     }

@@ -9,9 +9,9 @@ import { CgArrowsExchangeV } from 'react-icons/cg'
 import { GrStatusGood } from 'react-icons/gr'
 
 
-const CameraComponent = ({ close }) => {
+const CameraComponent = ({ close, setImageUrl }) => {
 
-    const isFullscreen = false;
+    const isFullscreen = true;
     const [image, setImage] = useState('');
 
     function handleTakePhotoAnimationDone (dataUri) {
