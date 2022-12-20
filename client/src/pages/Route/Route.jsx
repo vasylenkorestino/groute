@@ -49,14 +49,23 @@ const Route = ({ user }) => {
             order: 4, 
             modalOrder: 4, 
             hideCell: false 
+        }, 
+        { 
+            name: 'Photo', 
+            apiName: 'CompletedRoutePhoto__c', 
+            type: 'camera', 
+            width: 100, 
+            order: 4, 
+            modalOrder: 4, 
+            hideCell: true 
         },
         { 
             name: 'Unserviced', 
             apiName: 'Inactive__c', 
             type: 'checkbox', 
             width: 100, 
-            order: 4, 
-            modalOrder: 4, 
+            order: 5, 
+            modalOrder: 5, 
             hideCell: false 
         }
     ]
