@@ -43,7 +43,7 @@ const CameraComponent = ({ close }) => {
                 </div>
             : 
             <div className="w-100" style={{ height: 600 }}>
-                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
+                <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealResolution = {{width: 640, height: 480}} />
             </div>
         }
         </div>
