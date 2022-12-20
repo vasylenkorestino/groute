@@ -65,6 +65,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const handleSetImageUrl = (url) => {
         setImageUrl(url)
+        setForm({ ...form, 'CompletedRoutePhoto__c' : url }) 
     }
 
 
