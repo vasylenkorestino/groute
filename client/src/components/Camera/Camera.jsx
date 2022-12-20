@@ -37,14 +37,14 @@ const CameraComponent = ({ setImageUrl }) => {
                     <img style={{ height: 600 }} className="w-100" src={image} alt='Image preview' />
                     <div className="w-100 fixed-bottom" style={{ height: 100, zIndex: 1, opacity: 0.4 }}>
                         <div className="w-100 d-flex justify-content-center align-items-center">
-                                <InputGroup.Button size='lg' onClick={() => uploadPhoto()}>
+                                <InputGroup.Button size='lg' onClick={ uploadPhoto }>
                                     <GrStatusGood size={80} />
                                 </InputGroup.Button>
                             </div>
                     </div>
                 </div>
             : 
-            <Camera className="w-100" onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
+            <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
         }
         </div>
         
