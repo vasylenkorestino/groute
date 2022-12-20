@@ -74,11 +74,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                 { 
                     imageUrl 
                     ?
-                        <img style={{ width:200, height: 400 }} src={imageUrl} alt="routeImage"/>
+                        <img style={{ height: 400 }} className="w-100" src={imageUrl} alt="routeImage"/>
                     :
                     <>
                         <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill /></InputGroup.Button>
-                        <ModalWindow  show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl }/> }/>
+                        <ModalWindow show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl } /> }/>
                     </>
                 }
             </>

@@ -44,7 +44,7 @@ const CameraComponent = ({ setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} />
+            <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} isImageMirror={ false }/>
         }
         </div>
         
