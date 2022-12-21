@@ -40,10 +40,9 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
                             <div>
                                 <div className="display-4"> { route.Account_Name__c } </div>
                                 <div className="lead mb-0"> Address: { route.Container_Address__c } </div>
-                                <div className="lead mb-0"> Notes: { route.Notes__c } </div>
+                                <div className="lead mb-0"> Comment: { route.Notes__c } </div>
                                 <div className="lead mb-0"> Gallons: { route.Gallons_Collected__c } </div>
                                 <div className="lead mb-0"> ContainerSize: { route.Container_Size__c } </div>
-                                <div className="lead mb-0"> Rebate: { route.Rebate__c } </div>
                             </div>
                         </div></Col>
                     <Col xs={5} className='d-flex justify-content-center align-items-center'>
