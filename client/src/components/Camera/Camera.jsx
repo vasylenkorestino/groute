@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 
-import Camera from 'react-html5-camera-photo';
+import Camera, { IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
 import ModalWindow from '../Modal/Modal'
@@ -44,7 +44,7 @@ const CameraComponent = ({ setImageUrl }) => {
                     </div>
                 </div>
             : 
-            <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealFacingMode='environment' />
+            <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealFacingMode='environment' imageType = {IMAGE_TYPES.JPG}/>
         }
         </div>
         
