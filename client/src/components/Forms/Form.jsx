@@ -58,10 +58,10 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
             setForm({ ...form, password : '' }) 
         } else {
             setForm(current => {
-                // 👇️ remove password key from object
-                const {password, ...rest} = current;
-          
-                return rest;
+                const copy = {...current};
+                // 👇️ remove salary key from object
+                delete copy['password'];
+                return copy;
               });
         }
         console.log('handleChangePassword form : ', form)
@@ -77,12 +77,14 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                 ?
                     <>
                         <InputGroup inside>
+                            <InputGroup.Button onClick={handleChangePassword}>
+                                X
+                            </InputGroup.Button>
                             <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } autocomplete="new-password" />
                             <InputGroup.Button onClick={handleChangePasswordView}>
                                 {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
                             </InputGroup.Button>
                         </InputGroup>
-                        <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
                     </>
                 :
                     <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
@@ -156,7 +158,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                         <ThreeDots color="#00BFFF" height={80} width={80} />
                     </div>
                     :
-                    <form onSubmit={ e => e.preventDefault() } autocomplete="off">
+                    <form onSubmit={ e => e.preventDefault() } autocomplete="off" role="presentation">
                         <div hidden={true}><Form.Control name={ mode === 'salesforce' ? 'Id' : '_id'} value={ form[mode === 'salesforce' ? 'Id' : '_id'] } onChange={ handleChange }/> </div>
                         { columns.sort((a, b) => { return a.modalOrder - b.modalOrder }).map(column => ( !column.hideField && getInputFiled(column) )) }
                     </form>
