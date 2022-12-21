@@ -125,7 +125,7 @@ const uploadContentVersion = ({ fileName, fileBase64 }) => {
             console.log('work 1: ')
             conn.sobject('ContentVersion').create({
                 PathOnClient : fileName,
-                VersionData : fileBase64.toString('base64')
+                VersionData : fileBase64
               }, (err, response) => {
                 if (err || !response.success) { 
                     console.error(err, response); 
