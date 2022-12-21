@@ -123,14 +123,31 @@ const uploadContentVersion = ({ fileName, fileBase64 }) => {
 
             conn.sobject('ContentVersion').create({
                 PathOnClient : fileName,
-                VersionData : fileBase64
+                VersionData : fileBase64.toString('base64')
               }, (err, response) => {
                 if (err || !response.success) { 
                     console.error(err, response); 
                     reject(err);
                 }
 
-                resolve(response);
+                conn.sobject("ContentVersion").retrieve(response.id, function(err, cv) {
+                    if (err) { 
+                      reject(err)
+                      return console.error('err ->> ', err); 
+                    }
+          
+                    conn.sobject('ContentDocumentLink').create({
+                      ContentDocumentId: cv.ContentDocumentId,
+                      LinkedEntityId: '001Ea000003h9uLIAQ',
+                      Visibility: "AllUsers"
+                    }, function(err2, cdl){
+                      if (err2) { 
+                        reject(err2)
+                        return console.error('err222 => ', JSON.stringify(err2) + 'test');
+                       }
+                      resolve(cdl);
+                    })
+                  })
               });
         });
     })
