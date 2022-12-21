@@ -65,7 +65,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const handleSetImageUrl = (url) => {
         setImageUrl(url)
-        uploadPhoto({ fileName: 'test.jpg', fileBase64: url }).then(response => {
+        uploadPhoto(endpoint, { fileName: 'test.jpg', fileBase64: url }).then(response => {
             console.log('response handleSetImageUrl : ', response)
         })
         //setForm({ ...form, 'CompletedRoutePhoto__c' : url }) 
