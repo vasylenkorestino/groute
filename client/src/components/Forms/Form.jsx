@@ -41,9 +41,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         upsertRecord(endpoint, form)
         .then(response => response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong'))
         .then(() => {
-            uploadPhoto(endpoint, { fileName: record.Account_Name__c + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
-                console.log('response handleSetImageUrl : ', response)
-            })
+            if(imageUrl){
+                uploadPhoto(endpoint, { fileName: record.Account_Name__c + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
+                    console.log('response handleSetImageUrl : ', response)
+                })
+            }
         })
         .catch(error => toast.error(error))
         .finally(() => close())
