@@ -113,7 +113,7 @@ const getRecords = (query) => {
 
 const uploadContentVersion = ({ fileName, fileBase64 }) => {
     console.log('fileName: ', fileName);
-    console.log('file: ', file);
+    console.log('file: ', fileBase64);
     return new Promise((resolve,reject) => {
         conn.login(creds.login, creds.password, function(err, res) {
             if (err) { 

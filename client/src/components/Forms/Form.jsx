@@ -40,6 +40,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
     const handleUpsert = () => {
         upsertRecord(endpoint, form)
         .then(response => response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong'))
+        .then(() => {
+            uploadPhoto(endpoint, { fileName: 'test.jpg', fileBase64: imageUrl }).then(response => {
+                console.log('response handleSetImageUrl : ', response)
+            })
+        })
         .catch(error => toast.error(error))
         .finally(() => close())
     }
@@ -65,9 +70,6 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const handleSetImageUrl = (url) => {
         setImageUrl(url)
-        uploadPhoto(endpoint, { fileName: 'test.jpg', fileBase64: url }).then(response => {
-            console.log('response handleSetImageUrl : ', response)
-        })
         //setForm({ ...form, 'CompletedRoutePhoto__c' : url }) 
     }
 
