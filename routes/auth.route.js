@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
 
         if(!user){ return res.status(300).json({ status: 'error', message: 'User not found!' }) }
 
-        if(!user.isActive){ return res.status(404).json({ status: 'error', message: 'User is inActive! Please contact your System Administrator!' }) }
+        //if(!user.isActive){ return res.status(404).json({ status: 'error', message: 'User is inActive! Please contact your System Administrator!' }) }
 
         const isMatched = await bcrypt.compare(password, user.password);
 
