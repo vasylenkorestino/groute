@@ -8,9 +8,13 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json({ extended: true} ))
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
-app.use(bodyParser.json({limit: '50mb', extended: true}));
+const maxRequestBodySize = '1mb';
+
+//app.use(express.json({ extended: true} ))
+app.use(express.json({limit: maxRequestBodySize, extended: true }));
+app.use(express.urlencoded({limit: maxRequestBodySize}));
+//app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
+//app.use(bodyParser.json({limit: '50mb', extended: true}));
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 

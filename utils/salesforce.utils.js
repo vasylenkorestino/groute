@@ -18,7 +18,7 @@ const getRoutes = (driverName, dateOfService) => {
         let driverNamePart = driverName ? `AND Driver_Name__c = '${driverName}' ` : '';
         let dateOfServicePart = dateOfService ? `AND DateOfService__c = ${dateOfService} ` : ''
 
-        console.log('dateOfServicePart : ', dateOfServicePart)
+        //console.log('dateOfServicePart : ', dateOfServicePart)
 
         let query = "SELECT Id, RecordType.Name, AccountId__c, Account_Name__c, Container_Address__c, DateOfService__c, Distance_From_Start__c, Driver_Name__c, " +  
                     "Inactive__c, Gallons_Collected__c, Notes__c, Notes2__c, Driver_Notes__c, Service_Completed__c, Map_source__c, LastModifiedDate, Latitude__c, Longitude__c, " + 
@@ -33,7 +33,7 @@ const getRoutes = (driverName, dateOfService) => {
 
         getRecords(query).then(routes => {
             let googleRouteId = routes[0]?.Google_Route_Id__c;
-            console.log('googleRouteId : ', googleRouteId)
+            //console.log('googleRouteId : ', googleRouteId)
             if(googleRouteId){
                 let query = `SELECT Accounts__c FROM Google_Route__c WHERE Id = '${ googleRouteId }'`
                 getRecords(query).then(accounts => {

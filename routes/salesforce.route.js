@@ -19,7 +19,7 @@ router.get('/routes/records', (req, res) => {
     console.log('dateOfService2 : ', dateOfService)
 
     getRoutes(driverName, dateOfService).then(routes => {
-        console.log('routes : ', routes)
+        //console.log('routes : ', routes)
 
         let googleRoutes = [];
         routes.forEach(route => {
