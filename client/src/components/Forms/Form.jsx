@@ -75,17 +75,17 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
             { 
                 changePassword 
                 ?
-                    <InputGroup inside>
-                        <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } />
-                        <InputGroup.Button onClick={handleChangePasswordView}>
-                            {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
-                        </InputGroup.Button>
-                        <InputGroup.Button onClick={handleChangePassword}>
-                            X
-                        </InputGroup.Button>
-                    </InputGroup>
+                    <>
+                        <InputGroup inside>
+                            <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } />
+                            <InputGroup.Button onClick={handleChangePasswordView}>
+                                {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
+                            </InputGroup.Button>
+                        </InputGroup>
+                        <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
+                    </>
                 :
-                    <Button variant="primary" onClick={ handleChangePassword } size="lg">Change Password</Button>
+                    <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
             }
             </>
         )
