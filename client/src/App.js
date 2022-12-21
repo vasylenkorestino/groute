@@ -21,11 +21,11 @@ function App() {
 
   const routes = useRoutes(isLogin, isAdmin)
 
-  const { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord } = useData()
+  const { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto } = useData()
 
   return (
     <AuthContext.Provider value={{ session, userId, isAdmin, isReady, isLogin, login, logout, getCurrentUser, getUser }}>
-      <DataContext.Provider value={{ record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord }}>
+      <DataContext.Provider value={{ record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto }}>
         <Router>
           <Navigation />
           { routes }

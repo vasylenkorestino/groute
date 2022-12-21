@@ -111,4 +111,29 @@ const getRecords = (query) => {
     })
 }
 
-module.exports = { getRecords, getRoutes, updateRoute, getDrivers }
+const uploadContentVersion = ({ fileName, fileBase64 }) => {
+    console.log('fileName: ', fileName);
+    console.log('file: ', file);
+    return new Promise((resolve,reject) => {
+        conn.login(creds.login, creds.password, function(err, res) {
+            if (err) { 
+                console.error(err); 
+                reject(err);
+            }
+
+            conn.sobject('ContentVersion').create({
+                PathOnClient : fileName,
+                VersionData : fileBase64
+              }, (err, response) => {
+                if (err || !response.success) { 
+                    console.error(err, response); 
+                    reject(err);
+                }
+
+                resolve(response);
+              });
+        });
+    })
+}
+
+module.exports = { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion }

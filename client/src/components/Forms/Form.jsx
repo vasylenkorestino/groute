@@ -22,7 +22,7 @@ import Camera from '../Camera/Camera'
 
 const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
-    const { record, loading, upsertRecord } = useContext(DataContext)
+    const { record, loading, upsertRecord, uploadPhoto } = useContext(DataContext)
 
     const [form, setForm] = useState({})
 
@@ -65,6 +65,9 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const handleSetImageUrl = (url) => {
         setImageUrl(url)
+        uploadPhoto({ fileName: 'test.jpg', fileBase64: url }).then(response => {
+            console.log('response handleSetImageUrl : ', response)
+        })
         //setForm({ ...form, 'CompletedRoutePhoto__c' : url }) 
     }
 

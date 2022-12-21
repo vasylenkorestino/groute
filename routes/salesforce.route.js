@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-const { getRecords, getRoutes, updateRoute, getDrivers } = require('../utils/salesforce.utils') 
+const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion } = require('../utils/salesforce.utils') 
 
 router.get('/routes/records', (req, res) => {
 
@@ -46,6 +46,13 @@ router.post('/routes/upsert', (req, res) => {
 router.get('/drivers/records', (req, res) => {
     getDrivers()
     .then(drivers => res.json({ drivers: drivers }))
+    .catch(error => res.json({ error: error }))
+})
+
+router.post('/routes/uploadFile', (req, res) => {
+    console.log('req.body upsert routes: ', req.body)
+    uploadContentVersion(req.body)
+    .then(response => res.status(201).json({ record: response, message: 'The record has been created successfully!' }))
     .catch(error => res.json({ error: error }))
 })
 

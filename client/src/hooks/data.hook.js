@@ -106,6 +106,22 @@ export const useData = () => {
         })
     }
 
-    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord }
+    const uploadPhoto = (endpoint, data) => {
+        return new Promise( async (resolve, reject) => {
+            setIsReady(false)
+            console.log('form : ', data)
+
+            await axios.post( endpoint + '/uploadFile', data, { 'Content-Type': 'application/json' })
+            .then(response => {
+                resolve(response)
+                setIsReady(true)
+            }).catch(error => {
+                console.log('errors =>> ', error)
+                reject(error)
+            })
+        })
+    }
+
+    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto }
 
 }
