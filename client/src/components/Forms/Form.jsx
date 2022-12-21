@@ -138,7 +138,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                 } 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" type="submit" onClick={ handleUpsert }>Save</Button>
+                <Button variant="primary" type="submit" onClick={ handleUpsert } size="lg">Save</Button>
             </Modal.Footer>
         </>
     );
