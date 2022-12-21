@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser')
 const { restart } = require('nodemon');
 const path = require('path');
 
@@ -8,6 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json({ extended: true} ))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
