@@ -156,7 +156,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                         <ThreeDots color="#00BFFF" height={80} width={80} />
                     </div>
                     :
-                    <form onSubmit={ e => e.preventDefault() }>
+                    <form onSubmit={ e => e.preventDefault() } autocomplete="off">
                         <div hidden={true}><Form.Control name={ mode === 'salesforce' ? 'Id' : '_id'} value={ form[mode === 'salesforce' ? 'Id' : '_id'] } onChange={ handleChange }/> </div>
                         { columns.sort((a, b) => { return a.modalOrder - b.modalOrder }).map(column => ( !column.hideField && getInputFiled(column) )) }
                     </form>
