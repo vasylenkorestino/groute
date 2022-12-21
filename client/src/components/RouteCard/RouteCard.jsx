@@ -10,13 +10,16 @@ import InputForm from '../Forms/Form'
 
 import { SiGooglemaps } from 'react-icons/si'
 
-const RouteCard = ({ route, endpoint, columns }) => {
+const RouteCard = ({ route, endpoint, columns, reload }) => {
 
     const { setRecord, setIsReady } = useContext(DataContext)
 
     const [show, setShow] = useState(false)
 
-    const handleClose = () => setShow(!show)
+    const handleClose = () => {
+        setShow(!show)
+        reload()
+    }
 
     const handleEdit = (route) => {
         setShow(true)

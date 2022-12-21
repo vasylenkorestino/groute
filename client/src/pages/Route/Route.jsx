@@ -118,7 +118,7 @@ const Route = ({ user }) => {
                                 { 
                                     groutes && groutes.map((route, index) => (
                                         <List.Item key={index} index={index} className={ route.style }>
-                                            <RouteCard route={ route } endpoint={ endpoint } columns={ columns }/>
+                                            <RouteCard route={ route } endpoint={ endpoint } columns={ columns } reload={ () => getRoutes(filter) }/>
                                         </List.Item>
                                     ))
                                 }
