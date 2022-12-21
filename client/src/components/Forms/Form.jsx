@@ -77,7 +77,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                 ?
                     <>
                         <InputGroup inside>
-                            <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } />
+                            <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } autocomplete="new-password" />
                             <InputGroup.Button onClick={handleChangePasswordView}>
                                 {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
                             </InputGroup.Button>
