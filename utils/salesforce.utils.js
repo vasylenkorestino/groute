@@ -111,8 +111,9 @@ const getRecords = (query) => {
     })
 }
 
-const uploadContentVersion = ({ fileName, fileBase64 }) => {
+const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
     console.log('fileName: ', fileName);
+    console.log('sourceId : ', sourceId)
     console.log('file: ', fileBase64);
     console.log('file2 : ', fileBase64.toString('base64'))
     console.log('work : ')
@@ -143,7 +144,7 @@ const uploadContentVersion = ({ fileName, fileBase64 }) => {
           
                     conn.sobject('ContentDocumentLink').create({
                       ContentDocumentId: cv.ContentDocumentId,
-                      LinkedEntityId: '001Ea000003h9uLIAQ',
+                      LinkedEntityId: sourceId,
                       Visibility: "AllUsers"
                     }, function(err2, cdl){
                       if (err2) { 
