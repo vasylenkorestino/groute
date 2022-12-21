@@ -51,18 +51,43 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         .finally(() => close())
     }
 
+    const [changePassword, setChangePassword] = useState(false);
+    const handleChangePassword = () => {
+        setChangePassword(!changePassword)
+        if(changePassword){
+            setForm({ ...form, password : '' }) 
+        } else {
+            setForm(current => {
+                // 👇️ remove password key from object
+                const {password, ...rest} = current;
+          
+                return rest;
+              });
+        }
+        console.log('handleChangePassword form : ', form)
+    }
     const [visible, setVisible] = useState(false);
-
     const handleChangePasswordView = () => setVisible(!visible)
 
     const getPasswordInput = (column) => {
         return (
-            <InputGroup inside>
-                <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } />
-                <InputGroup.Button onClick={handleChangePasswordView}>
-                    {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
-                </InputGroup.Button>
-            </InputGroup>
+            <>
+            { 
+                changePassword 
+                ?
+                    <InputGroup inside>
+                        <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } />
+                        <InputGroup.Button onClick={handleChangePasswordView}>
+                            {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
+                        </InputGroup.Button>
+                        <InputGroup.Button onClick={handleChangePassword}>
+                            X
+                        </InputGroup.Button>
+                    </InputGroup>
+                :
+                    <Button variant="primary" onClick={ handleChangePassword } size="lg">Change Password</Button>
+            }
+            </>
         )
     }
 
