@@ -114,8 +114,8 @@ const getRecords = (query) => {
 const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
     console.log('fileName: ', fileName);
     console.log('sourceId : ', sourceId)
-    console.log('file: ', fileBase64);
-    console.log('file2 : ', fileBase64.toString('base64'))
+    //console.log('file: ', fileBase64);
+    //console.log('file2 : ', fileBase64.toString('base64'))
     console.log('work : ')
     return new Promise((resolve,reject) => {
         conn.login(creds.login, creds.password, function(err, res) {
@@ -124,7 +124,6 @@ const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
                 reject(err);
             }
             console.log('work 1: ')
-            let base64data = new Buffer(fileBase64).toString('base64');
             let data = fileBase64.toString('base64');
             data = data.split(',')[1]
             conn.sobject('ContentVersion').create({
