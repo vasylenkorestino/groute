@@ -114,13 +114,15 @@ const getRecords = (query) => {
 const uploadContentVersion = ({ fileName, fileBase64 }) => {
     console.log('fileName: ', fileName);
     console.log('file: ', fileBase64);
+    console.log('file2 : ', fileBase64.toString('base64'))
+    console.log('work : ')
     return new Promise((resolve,reject) => {
         conn.login(creds.login, creds.password, function(err, res) {
             if (err) { 
                 console.error(err); 
                 reject(err);
             }
-
+            console.log('work 1: ')
             conn.sobject('ContentVersion').create({
                 PathOnClient : fileName,
                 VersionData : fileBase64.toString('base64')
@@ -129,7 +131,7 @@ const uploadContentVersion = ({ fileName, fileBase64 }) => {
                     console.error(err, response); 
                     reject(err);
                 }
-
+                console.log('work 2: ')
                 conn.sobject("ContentVersion").retrieve(response.id, function(err, cv) {
                     if (err) { 
                       reject(err)
