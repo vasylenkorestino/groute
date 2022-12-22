@@ -39,8 +39,8 @@ const Admin = () => {
     return (
             <Grid fluid>
                 <Row className="show-grid">
-                    <Col xs={4}>
-                        <BiExpandAlt onClick={ () => setExpanded(!expanded) }/>
+                    <Col xs={ expanded ? 3 : 1 }>
+                        <BiExpandAlt onClick={ () => setExpanded(!expanded) } size="lg"/>
                         <Sidenav
                             expanded={ expanded }
                             defaultOpenKeys={[]}
@@ -77,7 +77,7 @@ const Admin = () => {
                         </Sidenav.Body>
                         </Sidenav>
                     </Col>
-                    <Col xs={20}>
+                    <Col xs={ expanded ? 21 : 23 }>
                         { 
                             getContent(activeKey)
                         } 
