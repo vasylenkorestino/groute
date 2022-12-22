@@ -83,7 +83,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         return (
             <>
             { 
-                changePassword 
+                changePassword || isNew
                 ?
                     <>
                         <InputGroup inside>
