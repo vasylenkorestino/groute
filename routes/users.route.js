@@ -59,6 +59,12 @@ router.post('/upsert', async (req, res) => {
         console.log('user : ', user)
 
         if(user.hasOwnProperty('_id')){
+
+            if(user.hasOwnProperty('password')){
+                const hashedPassword = await bcrypt.hash(user.password, 12);
+                user.password = hashedPassword;
+            }
+
             let ress = await User.updateOne( { _id: user._id }, user)
             console.log('ress : ', ress)
             res.status(201).json({ record : user, message: 'The record has been updated successfully!' })
@@ -69,9 +75,10 @@ router.post('/upsert', async (req, res) => {
 
             if(isUsed){ return res.status(300).json({ status: 'error', errors: [{ msg: 'Email is used already.' }], message: 'Email is used already.' }) }
 
-            const hashedPassword = await bcrypt.hash(user.password, 12);
-
-            user.password = hashedPassword;
+            if(user.hasOwnProperty('password')){
+                const hashedPassword = await bcrypt.hash(user.password, 12);
+                user.password = hashedPassword;
+            }
 
             await User.create(user, (error, response) => { 
                 console.log('response : ', response)

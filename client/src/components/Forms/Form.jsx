@@ -22,14 +22,22 @@ import Camera from '../Camera/Camera'
 
 const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
-    const { record, loading, upsertRecord, uploadPhoto } = useContext(DataContext)
+    const { isNew, record, loading, upsertRecord, uploadPhoto } = useContext(DataContext)
 
     const [form, setForm] = useState({})
 
     useEffect(() => { 
         console.log('record : ', record)
-        setForm({ ...record })  
+        setRecordWithoutPasswordKey();
     },[ record ])
+
+    const setRecordWithoutPasswordKey = () => {
+        setForm(current => {
+            const copy = {...current};
+            delete copy['password'];
+            return copy;
+          });
+    }
 
     const handleChange = (event) => { 
         console.log('event select : ', event)
@@ -57,12 +65,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         if(changePassword){
             setForm({ ...form, password : '' }) 
         } else {
-            setForm(current => {
-                const copy = {...current};
-                // 👇️ remove salary key from object
-                delete copy['password'];
-                return copy;
-              });
+            setRecordWithoutPasswordKey();
         }
         console.log('handleChangePassword form : ', form)
     }
@@ -77,9 +80,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                 ?
                     <>
                         <InputGroup inside>
-                            <InputGroup.Button onClick={handleChangePassword}>
-                                X
-                            </InputGroup.Button>
+                            { !isNew && <InputGroup.Button onClick={handleChangePassword}>X</InputGroup.Button> }
                             <Input type={visible ? 'text' : 'password'} value={ form[column.apiName] } onChange={ e => handleChange({ name: column.apiName, e: e }) } autocomplete="new-password" />
                             <InputGroup.Button onClick={handleChangePasswordView}>
                                 {visible ? <FaRegEye /> : <BsFillEyeSlashFill />}
@@ -87,7 +88,7 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                         </InputGroup>
                     </>
                 :
-                    <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
+                    !isNew && <Button variant="light" onClick={ handleChangePassword } size="sm">Change Password</Button>
             }
             </>
         )
