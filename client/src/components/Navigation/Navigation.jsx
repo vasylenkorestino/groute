@@ -20,8 +20,8 @@ const Navigation = () => {
     return (
         <Navbar bg="#292d33" variant="dark">
             <Container>
-            <div style={{ flex: 1, height: 100 }} className='d-flex justify-content-between'>
-                <div style={{ flex: 0.9, alignItems: 'center' }}>
+            <div style={{ flex: 1, height: 100, alignItems: 'center' }} className='d-flex justify-content-between'>
+                <div style={{ flex: 0.9 }}>
                     <Navbar.Brand href="/">
                         <IconContext.Provider value={{ size: "4em" }}>
                             < GiFoodTruck />
@@ -40,14 +40,14 @@ const Navigation = () => {
                                                     isAdmin 
                                                     && 
                                                     <Nav.Link href="/account">
-                                                        <IconContext.Provider value={{ size: "2em" }}>
+                                                        <IconContext.Provider value={{ size: "3em" }}>
                                                             < BiUserCircle />
                                                         </IconContext.Provider>
                                                     </Nav.Link>
                                                 }
                                                 
                                                 <Nav.Link href="/" onClick={ logout }>
-                                                    <IconContext.Provider value={{ size: "2em" }}>
+                                                    <IconContext.Provider value={{ size: "3em" }}>
                                                         < IoMdLogOut />
                                                     </IconContext.Provider>
                                                 </Nav.Link>
@@ -55,7 +55,7 @@ const Navigation = () => {
                                         :
                                             <Nav className="me-auto">
                                                 <Nav.Link href="/login">
-                                                    <IconContext.Provider value={{ size: "2em" }}>
+                                                    <IconContext.Provider value={{ size: "3em" }}>
                                                         < IoMdLogIn />
                                                     </IconContext.Provider>
                                                 </Nav.Link>
