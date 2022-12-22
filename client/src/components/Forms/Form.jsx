@@ -49,6 +49,10 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
     }
 
     const handleUpsert = () => {
+        if(form.hasOwnProperty('password') && form?.password == ''){
+            setRecordWithoutPasswordKey();
+        }
+
         upsertRecord(endpoint, form)
         .then(response => response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong'))
         .then(() => {
