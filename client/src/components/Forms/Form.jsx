@@ -65,10 +65,10 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
     const [changePassword, setChangePassword] = useState(false);
     const handleChangePassword = () => {
         setChangePassword(!changePassword)
-        if(changePassword){
-            setForm({ ...form, password : '' }) 
+        if(form.hasOwnProperty('password')){
+            setRecordWithoutPasswordKey();  
         } else {
-            setRecordWithoutPasswordKey();
+            setForm({ ...form, password : '' }) 
         }
         console.log('handleChangePassword form : ', form)
     }
