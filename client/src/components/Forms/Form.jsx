@@ -28,7 +28,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     useEffect(() => { 
         console.log('record : ', record)
-        setRecordWithoutPasswordKey();
+        if(record.hasOwnProperty('password')){
+            setRecordWithoutPasswordKey();
+        } else {
+            setForm({ ...record })
+        }
     },[ record ])
 
     const setRecordWithoutPasswordKey = () => {
