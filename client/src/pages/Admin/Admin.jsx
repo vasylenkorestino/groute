@@ -9,13 +9,15 @@ import ListIcon from '@rsuite/icons/List'
 import GridIcon from '@rsuite/icons/Grid';
 import GearIcon from '@rsuite/icons/Gear'
 
+import { BiExpandAlt } from 'react-icons/bi';
+
 import CameraComponent from '../../components/Camera/Camera'
 
 import 'rsuite/dist/rsuite.min.css'
 
 const Admin = () => {
 
-    const [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(false);
     const [activeKey, setActiveKey] = useState('users');
 
     const handleSelect = (eventKey) => {
@@ -38,6 +40,7 @@ const Admin = () => {
             <Grid fluid>
                 <Row className="show-grid">
                     <Col xs={4}>
+                        <BiExpandAlt onClick={ () => setExpanded(!expanded) }/>
                         <Sidenav
                             expanded={ expanded }
                             defaultOpenKeys={[]}
@@ -52,22 +55,24 @@ const Admin = () => {
                             <Nav.Item eventKey="users" icon={<ListIcon />}>
                                 Users
                             </Nav.Item>
-                            <Dropdown
-                                placement="rightTop"
-                                eventKey="3"
-                                title="Advanced"
-                                icon={<GridIcon />}
-                            >
-                                <Dropdown.Item eventKey="test">Test</Dropdown.Item>
-                            </Dropdown>
-                            <Dropdown
-                                placement="rightTop"
-                                eventKey="4"
-                                title="Settings"
-                                icon={<GearIcon />}
-                            >
-                                <Dropdown.Item eventKey="settings">User Settings</Dropdown.Item>
-                            </Dropdown>
+                            { /* 
+                                <Dropdown
+                                    placement="rightTop"
+                                    eventKey="3"
+                                    title="Advanced"
+                                    icon={<GridIcon />}
+                                >
+                                    <Dropdown.Item eventKey="test">Test</Dropdown.Item>
+                                </Dropdown>
+                                <Dropdown
+                                    placement="rightTop"
+                                    eventKey="4"
+                                    title="Settings"
+                                    icon={<GearIcon />}
+                                >
+                                    <Dropdown.Item eventKey="settings">User Settings</Dropdown.Item>
+                                </Dropdown>
+                            */}
                             </Nav>
                         </Sidenav.Body>
                         </Sidenav>
