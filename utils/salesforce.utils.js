@@ -1,11 +1,11 @@
 const jsforce = require('jsforce');
 const conn = new jsforce.Connection({
-    loginUrl : 'https://test.salesforce.com'
+    loginUrl : process.env.SF_URL
 })
 
 const creds = {
-    login : '3rd.orest@gmail.com.partia1',
-    password : 'Myrooom2020!'
+    login : process.env.SF_USERNAME,
+    password : process.env.SF_PASSWORD
 }
 
 const getDrivers = () => {
