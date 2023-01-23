@@ -28,7 +28,9 @@ app.get('*', (req, res) => {
 
 const launch = async () => {
     try {
-        await mongoose.connect('mongodb+srv://gstarroutes:xnuHZq2bHEX@cluster0.t8er0.mongodb.net/gsroutes?retryWrites=true&w=majority', {
+        //mongodb+srv://gstarroutes:xnuHZq2bHEX@cluster0.t8er0.mongodb.net/gsroutes?retryWrites=true&w=majority
+        //mongodb+srv://orest:<password>@uco.ilxo1ct.mongodb.net/test
+        await mongoose.connect('mongodb+srv://orest:1q2w3e4r@uco.ilxo1ct.mongodb.net/test?retryWrites=true&w=majority', {
             useNewUrlParser: true, 
             useUnifiedTopology: true 
         }, error => { 
