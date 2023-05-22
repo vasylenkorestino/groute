@@ -42,6 +42,8 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
                                 <div className="lead mb-0"> Address: { route.Container_Address__c } </div>
                                 <div className="lead mb-0"> Comment: { route.Notes__c } </div>
                                 <div className="lead mb-0"> Gallons: { route.Gallons_Collected__c } </div>
+                                <div className="lead mb-0"> Service Type: { route.ServiceType__c } </div>
+                                <div className="lead mb-0"> Service Sub Type: { route.ServiceSubType__c } </div>
                                 <div className="lead mb-0"> ContainerSize: { route.Container_Size__c } </div>
                             </div>
                         </div></Col>
