@@ -5,7 +5,7 @@ import { DataContext } from '../../contexts/DataContext'
 
 import './Route.css'
 
-import { List, Panel, Row, Col, DatePicker, SelectPicker } from 'rsuite';
+import { List, Panel, Row, Button, Col, DatePicker, SelectPicker } from 'rsuite';
 
 import { ThreeDots } from  'react-loader-spinner'
 
@@ -17,7 +17,7 @@ import RouteCard from '../../components/RouteCard/RouteCard'
 const Route = ({ user }) => {
 
     const { isAdmin } = useContext(AuthContext)
-    const { drivers, groutes, getDrivers, getRoutes, setIsReady, loading } = useContext(DataContext)
+    const { drivers, groutes, getDrivers, getRoutes, setIsReady, loading, notifyAdmin } = useContext(DataContext)
 
     const endpoint = 'api/salesforce/routes'
     const columns = [
@@ -98,6 +98,15 @@ const Route = ({ user }) => {
         setFilter( f => ({ ...f, driverName: event }))
     }
 
+    const handleNotify = () => {
+        let route = groutes.length && groutes[0]
+
+        notifyAdmin(endpoint, route).then(response => {
+            console.log('response  :', response)
+            response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong')
+        })
+    }
+
     return (
         <div>
             <ToastContainer />
@@ -123,15 +132,20 @@ const Route = ({ user }) => {
                     :
                         groutes && groutes.length 
                         ? 
-                            <List size="lg" autoScroll hover sortable>
-                                { 
-                                    groutes && groutes.map((route, index) => (
-                                        <List.Item key={index} index={index} className={ route.style }>
-                                            <RouteCard route={ route } endpoint={ endpoint } columns={ columns } reload={ () => getRoutes(filter) }/>
-                                        </List.Item>
-                                    ))
-                                }
-                            </List>
+                            <>
+                                <List size="lg" autoScroll hover sortable>
+                                    { 
+                                        groutes && groutes.map((route, index) => (
+                                            <List.Item key={index} index={index} className={ route.style }>
+                                                <RouteCard route={ route } endpoint={ endpoint } columns={ columns } reload={ () => getRoutes(filter) }/>
+                                            </List.Item>
+                                        ))
+                                    }
+                                </List>
+                                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center', height: 100 }}>
+                                    <Button style={{ width: '90%', height: 60 }} size="lg" onClick={handleNotify}>Send Notification</Button>
+                                </div>
+                            </>
                         :
                         <div style={{ height: 300 }} className="display-6 d-flex justify-content-center align-items-center">Routes for { filter.driverName } not found!</div> 
                 }

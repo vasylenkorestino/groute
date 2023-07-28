@@ -159,4 +159,39 @@ const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
     })
 }
 
-module.exports = { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion }
+
+const notifySalesforceAdmin = (route) => {
+
+    let message = route?.Driver_Name__c + ' completed ' + route?.Name
+    let googleRouteId = route?.Google_Route_Id__c 
+
+    let request = {
+        url: process.env.SF_NOTIFICATION_URL,
+        method: 'POST',
+        body: JSON.stringify( {
+            "props": {
+                "routeId": googleRouteId,
+                "message": message
+            }
+        }),
+        headers : {
+                "Accept":"application/json",
+                "Content-Type" : "application/json"
+            }
+      };
+
+      console.log('request : ', request)
+
+    return new Promise((resolve,reject) => {
+        conn.request(request, function(err, resp) {
+            if(err){ 
+                console.log(err)
+                reject(err)
+            }
+            console.log(resp);
+            resolve(resp)
+        });
+    })
+}
+
+module.exports = { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin }

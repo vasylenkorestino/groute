@@ -122,6 +122,19 @@ export const useData = () => {
         })
     }
 
-    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto }
+    const notifyAdmin = async (endpoint, route) => {
+        return new Promise( async (resolve, reject) => {
+            await axios.post( endpoint + '/notify', route, { 'Content-Type': 'application/json' })
+            .then(response => {
+                resolve(response)
+                setIsReady(true)
+            }).catch(error => {
+                console.log('errors =>> ', error)
+                reject(error)
+            })
+        })
+    }
+
+    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto, notifyAdmin }
 
 }

@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion } = require('../utils/salesforce.utils') 
+const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin } = require('../utils/salesforce.utils') 
 
 router.get('/routes/records', (req, res) => {
 
@@ -53,6 +53,13 @@ router.post('/routes/uploadFile', (req, res) => {
     console.log('req.body upsert routes: ', req.body)
     uploadContentVersion(req.body)
     .then(response => res.status(201).json({ record: response, message: 'The record has been created successfully!' }))
+    .catch(error => res.json({ error: error }))
+})
+
+router.post('/routes/notify', (req, res) => {
+    console.log('req.body notify routes: ', req.body)
+    notifySalesforceAdmin(req.body)
+    .then(response => res.status(201).json({ message: 'Notification has been sent!' }))
     .catch(error => res.json({ error: error }))
 })
 
