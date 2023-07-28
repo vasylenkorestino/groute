@@ -42,7 +42,7 @@ const Route = ({ user }) => {
             hideCell: false 
         }, 
         { 
-            name: 'Description', 
+            name: 'Driver Note', 
             apiName: 'Driver_Notes__c', 
             type: 'long', 
             width: 100, 

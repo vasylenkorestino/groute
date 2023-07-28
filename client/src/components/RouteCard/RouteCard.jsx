@@ -25,10 +25,17 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
     const handleEdit = (route) => {
         setShow(true)
         if(route?.ServiceSubType__c){
-            if(!route?.ServiceSubType__c?.includes('Deliver')){
+            if(!route?.ServiceSubType__c == 'Deliver Container' && !route?.ServiceSubType__c == 'Remove Container'  ){
                 setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number')))
             } else {
-                setUpdatedColumns(columns)
+                let updated = columns.filter(c => ( c.name != 'Gallons' ))
+
+                updated.forEach(column => {
+                    if(column.name == 'Service Issues'){
+                        column.data = column.data.filter(c => ( c.value != 'Not Collected - Low' && c.value != 'Not Collected - Empty' ))
+                    }
+                })
+                setUpdatedColumns(updated)
             }
         } else {
             setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number')))
