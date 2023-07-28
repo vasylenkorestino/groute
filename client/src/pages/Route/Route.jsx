@@ -60,6 +60,15 @@ const Route = ({ user }) => {
             hideCell: false 
         },
         { 
+            name: 'Second Serial Number', 
+            apiName: 'SecondSerialNumber__c', 
+            type: 'text', 
+            width: 100, 
+            order: 4, 
+            modalOrder: 4, 
+            hideCell: false 
+        },
+        { 
             name: 'Photo', 
             apiName: 'CompletedRoutePhoto__c', 
             type: 'camera', 

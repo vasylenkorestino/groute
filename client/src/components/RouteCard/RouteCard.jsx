@@ -25,8 +25,8 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
     const handleEdit = (route) => {
         setShow(true)
         if(route?.ServiceSubType__c){
-            if(!route?.ServiceSubType__c == 'Deliver Container' && !route?.ServiceSubType__c == 'Remove Container'  ){
-                setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number')))
+            if(!route?.ServiceSubType__c == 'Deliver Container' && !route?.ServiceSubType__c == 'Replace Container' ){
+                setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number' && c.name != 'Second Serial Number' )))
             } else {
                 let updated = columns.filter(c => ( c.name != 'Gallons' ))
 
@@ -38,7 +38,7 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
                 setUpdatedColumns(updated)
             }
         } else {
-            setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number')))
+            setUpdatedColumns(columns.filter(c => ( c.name != 'Serial Number' && c.name != 'Second Serial Number')))
         }
         setRecord(route)
         setIsReady(true)
