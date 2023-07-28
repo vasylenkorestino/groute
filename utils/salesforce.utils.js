@@ -81,6 +81,7 @@ const updateRoute = (data) => {
                 Notes2__c : data.Notes2__c,
                 Driver_Notes__c : data.Driver_Notes__c,
                 Gallons_Collected__c : data.Gallons_Collected__c,
+                SerialNumber__c: data.SerialNumber__c,
                 Status__c : '',
                 Inactive__c : data.Inactive__c
               }, (err, response) => {

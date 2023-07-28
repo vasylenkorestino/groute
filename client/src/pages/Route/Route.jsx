@@ -51,12 +51,21 @@ const Route = ({ user }) => {
             hideCell: false 
         }, 
         { 
+            name: 'Serial Number', 
+            apiName: 'SerialNumber__c', 
+            type: 'text', 
+            width: 100, 
+            order: 4, 
+            modalOrder: 4, 
+            hideCell: false 
+        },
+        { 
             name: 'Photo', 
             apiName: 'CompletedRoutePhoto__c', 
             type: 'camera', 
             width: 100, 
-            order: 4, 
-            modalOrder: 4, 
+            order: 5, 
+            modalOrder: 5, 
             hideCell: true 
         },
         { 
@@ -64,8 +73,8 @@ const Route = ({ user }) => {
             apiName: 'Inactive__c', 
             type: 'checkbox', 
             width: 100, 
-            order: 5, 
-            modalOrder: 5, 
+            order: 6, 
+            modalOrder: 6, 
             hideCell: false 
         }
     ]
