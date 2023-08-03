@@ -53,7 +53,7 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
                         <IconButton className='d-flex justify-content-center align-items-center' style={{ width: 100, height: 100 }} circle size='lg' appearance="subtle" icon={<SiGooglemaps color="blue" style={{ width: 30, height: 30 }} />} href={ route.link } target="_blank"></IconButton>
                     </Col>
                     <Col xs={14}>
-                        <div className="d-flex flex-column align-items-center">
+                        <div className="d-flex flex-column">
                             <div>
                                 <div className="display-4"> { route.Account_Name__c } </div>
                                 <div className="lead mb-0"> Address: { route.Container_Address__c } </div>
