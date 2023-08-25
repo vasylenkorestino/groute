@@ -9,9 +9,10 @@ import { InputGroup, } from 'rsuite'
 import { BsFillCameraFill, BsSkipBackwardCircle } from 'react-icons/bs'
 import { CgArrowsExchangeV } from 'react-icons/cg'
 import { GrStatusGood } from 'react-icons/gr'
+import { AiOutlineCloseCircle } from 'react-icons/ai'
 
 
-const CameraComponent = ({ setImageUrl }) => {
+const CameraComponent = ({ setImageUrl, closeCamera }) => {
 
     const isFullscreen = false;
     const [image, setImage] = useState('');
@@ -23,6 +24,7 @@ const CameraComponent = ({ setImageUrl }) => {
 
     const uploadPhoto = () => {
         setImageUrl(image)
+        setImage('')
     }
 
   return (
@@ -40,11 +42,23 @@ const CameraComponent = ({ setImageUrl }) => {
                                 <InputGroup.Button size='lg' onClick={ uploadPhoto }>
                                     <GrStatusGood size={80} />
                                 </InputGroup.Button>
+                                <InputGroup.Button size='lg' onClick={ closeCamera }>
+                                    <AiOutlineCloseCircle size={80} />
+                                </InputGroup.Button>
                             </div>
                     </div>
                 </div>
             : 
+            <>
+            <div className="w-100">
+                <div className="w-100 d-flex justify-content-end align-items-center">
+                    <InputGroup.Button size='lg' onClick={ closeCamera }>
+                        <AiOutlineCloseCircle size={40} />
+                    </InputGroup.Button>
+                </div>
+            </div>
             <Camera className="w-100" style={{ height: 600 }} onTakePhotoAnimationDone = {handleTakePhotoAnimationDone} isFullscreen={isFullscreen} idealFacingMode='environment' imageType = {IMAGE_TYPES.JPG}/>
+            </>
         }
         </div>
         

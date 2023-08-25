@@ -56,9 +56,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         upsertRecord(endpoint, form)
         .then(response => response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong'))
         .then(() => {
-            if(imageUrl){
-                uploadPhoto(endpoint, { fileName: record.Account_Name__c + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
-                    console.log('response handleSetImageUrl : ', response)
+            if(imageUrls.length){
+                imageUrls.forEach(imageUrl => {
+                    uploadPhoto(endpoint, { fileName: record.Account_Name__c + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
+                        console.log('response handleSetImageUrl : ', response)
+                    })
                 })
             }
         })
@@ -103,11 +105,11 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const [showCamera, setShowCamera] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
+    const [imageUrls, setImageUrls] = useState([]);
     const handleChangeCameraView = () => setShowCamera(!showCamera)
 
     const handleSetImageUrl = (url) => {
-        setImageUrl(url)
-        //setForm({ ...form, 'CompletedRoutePhoto__c' : url }) 
+        setImageUrls([...imageUrls, url])
     }
 
 
@@ -115,13 +117,15 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         return (
             <>
                 { 
-                    imageUrl 
+                    imageUrls.length && !showCamera
                     ?
-                        <img style={{ height: 400 }} className="w-100" src={imageUrl} alt="routeImage"/>
+                    <div className="d-flex">
+                        { imageUrls.map(url => ( <img style={{ width: 150, height: 150 }} src={url} alt="routeImage"/> ))  } 
+                    </div>
                     :
                     <>
                         <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill /></InputGroup.Button>
-                        <ModalWindow show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl } /> }/>
+                        <ModalWindow show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl } closeCamera={ handleChangeCameraView } /> }/>
                     </>
                 }
             </>
