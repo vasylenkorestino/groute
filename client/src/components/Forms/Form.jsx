@@ -20,6 +20,8 @@ import { FaRegEye } from 'react-icons/fa';
 import ModalWindow from '../Modal/Modal'
 import Camera from '../Camera/Camera'
 
+import './Form.css'
+
 const InputForm = ({ endpoint, columns, close, title, mode }) => {
 
     const { isNew, record, loading, upsertRecord, uploadPhoto } = useContext(DataContext)
@@ -112,22 +114,31 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
         setImageUrls([...imageUrls, url])
     }
 
+    const handleRemoveImage = (url) => {
+        console.log('event;  ', url)
+        setImageUrls(imageUrls.filter(imageUrl => ( imageUrl != url )))
+    }
 
     const getCameraInput = (column) => {
         return (
             <>
-                { 
-                    imageUrls.length && !showCamera
-                    ?
-                    <div className="d-flex">
-                        { imageUrls.map(url => ( <img style={{ width: 150, height: 150 }} src={url} alt="routeImage"/> ))  } 
+                <div className="d-flex">
+                    { imageUrls.length ? imageUrls.map(url => ( 
+                    
+                    <div className="thumbnail m-1" key={url}>
+                        <div className="d-flex justify-content-center align-items-center">
+                            <InputGroup.Button onClick={ () => handleRemoveImage(url)}>X</InputGroup.Button>
+                        </div>
+                        <img style={{ width: 100, height: 100 }} src={url} alt="routeImage"/> 
                     </div>
-                    :
-                    <>
-                        <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill /></InputGroup.Button>
+                    
+                    )) : <></> } 
+
+                    <div className="d-flex align-items-center m-1">
+                        <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill style={{ width: 50, height: 50 }} /></InputGroup.Button>
                         <ModalWindow show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl } closeCamera={ handleChangeCameraView } /> }/>
-                    </>
-                }
+                    </div>
+                </div>
             </>
         )
     }
