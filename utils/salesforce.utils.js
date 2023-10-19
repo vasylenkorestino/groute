@@ -83,6 +83,7 @@ const updateRoute = (data) => {
                 Gallons_Collected__c : data.Gallons_Collected__c,
                 SerialNumber__c: data.SerialNumber__c,
                 SecondSerialNumber__c: data.SecondSerialNumber__c,
+                LastActivityDate__c: new Date().toISOString(),
                 Status__c : '',
                 Inactive__c : data.Inactive__c
               }, (err, response) => {
