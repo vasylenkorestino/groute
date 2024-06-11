@@ -1,4 +1,7 @@
 const jsforce = require('jsforce');
+
+const fetch = require('fetch-base64');
+
 const conn = new jsforce.Connection({
     loginUrl : process.env.SF_URL
 })
