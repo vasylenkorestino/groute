@@ -22,19 +22,41 @@ import Camera from '../Camera/Camera'
 
 import './Form.css'
 
-const InputForm = ({ endpoint, columns, close, title, mode }) => {
+const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
 
-    const { isNew, record, loading, upsertRecord, uploadPhoto } = useContext(DataContext)
+    const { isNew, record, loading, upsertRecord, uploadPhoto, getFiles } = useContext(DataContext)
 
     const [form, setForm] = useState({})
 
+    const [imageLoading, setImageLoading] = useState(true)
+    const [images, setImages] = useState([])
+
     useEffect(() => { 
         console.log('record : ', record)
+        record && getRelatedFiles(record)
         setForm({ ...record })
         if(record.hasOwnProperty('password') && !isNew){
             setRecordWithoutPasswordKey()
         }
     },[ record ])
+
+    const getRelatedFiles = (route) => {
+        
+        route.Account__c && getFiles({ accountId: route.Account__c }).then(files => {
+            console.log('getFiles response : ', files)
+                
+            let base64files = []
+            files && files.forEach(f => {
+                let file = f[0]
+                let base64_response = `data:application/jpeg;base64,${file}`
+                console.log(base64_response)
+                base64files.push(base64_response)
+            })
+            console.log('base64files ; ',base64files)
+            setImages(base64files)
+            setImageLoading(false)
+        })
+    }
 
     const setRecordWithoutPasswordKey = () => {
         setForm(current => {
@@ -186,6 +208,30 @@ const InputForm = ({ endpoint, columns, close, title, mode }) => {
                         { columns.sort((a, b) => { return a.modalOrder - b.modalOrder }).map(column => ( !column.hideField && getInputFiled(column) )) }
                     </form>
                 } 
+
+                {
+                    hasImages 
+                    ? 
+                        imageLoading
+                        ?
+                        <div style={{ height: 300 }} className='d-flex w-100 justify-content-center align-items-center'>
+                            <ThreeDots color="#00BFFF" height={80} width={80} />
+                        </div>
+                        :
+                        <div class="mb-3">
+                            <h6 class="d-flex justify-content-start" style={{ marginBottom: 10 }}>Driver Photos</h6>
+                            { images && images.length ?
+                            <Carousel className="custom-slider">
+                                { images && images.map(url => (
+                                    <img src={url}  height="250" />
+                                ))}
+                            </Carousel>
+                            : <></>
+                            }
+                        </div>
+                    : 
+                    <></>
+                }
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="primary" type="submit" onClick={ handleUpsert } size="lg">Save</Button>

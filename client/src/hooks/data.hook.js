@@ -135,6 +135,18 @@ export const useData = () => {
         })
     }
 
-    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto, notifyAdmin }
+    const getFiles = (filter) => {
+        return new Promise( async (resolve, reject) => {
+            console.log('filter : ', filter)
+            const response = await fetch('api/salesforce/account/files?'  + new URLSearchParams(filter));
+            const data = await response.json();
+            console.log('response getFiles : ', data)
+            setIsReady(true)
+            resolve(data.files)
+        })
+    }
+
+
+    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto, notifyAdmin, getFiles }
 
 }

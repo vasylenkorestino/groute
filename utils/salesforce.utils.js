@@ -196,4 +196,69 @@ const notifySalesforceAdmin = (route) => {
     })
 }
 
-module.exports = { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin }
+
+const getFiles = (accountId) => {
+    return new Promise( (resolve, reject) => {
+
+        let versionIds = []
+
+        conn.login(creds.login, creds.password, async (error, response) => {
+            console.log('response : ', response)
+
+            let accounts = await getRecords("SELECT Id, Name FROM Account WHERE Id = '" + accountId + "'")
+            console.log('accounts : ', accounts)
+            let account = accounts?.length ? accounts[0] : undefined
+
+            console.log('account : ', account)
+
+            let links = await getRecords("SELECT Id, ContentDocumentId FROM ContentDocumentLink WHERE ContentDocument.Title = '" + account.Name + "' AND LinkedEntityId = '" + accountId + "'")
+            
+            let documentIds = ''
+            let count = 0
+            links && links.forEach(l => {
+                count++;
+                if(links.length == count){
+                    documentIds += "'" + l.ContentDocumentId + "'";
+                } else {
+                    documentIds += "'" + l.ContentDocumentId + "',";
+                }
+                console.log('l', l)
+            })
+            console.log('documentIds : ', documentIds)
+            if(documentIds == ''){ 
+                resolve([])
+                return; 
+            }
+            let versions = await getRecords("SELECT Id, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN (" + documentIds + ")")
+            
+            console.log('versions : ', versions)
+            versions && versions.forEach(v => {
+                versionIds.push(v.Id)
+                console.log('a', v)
+            })
+
+            let instanceUrl = 'https://gstarbio.my.salesforce.com/'
+            
+            let promises = []
+            versionIds.forEach(async (versionId) => {
+                console.log('versionId : ', versionId)
+
+                promises.push(fetch.remote({ 
+                    url: instanceUrl + '/services/data/v42.0/sobjects/ContentVersion/' + versionId + '/VersionData', 
+                    headers: { 
+                    'Authorization': 'Bearer ' + conn.accessToken 
+                    } 
+                }))
+            })
+
+            Promise.all(promises).then((values) => {
+                results = values
+                console.log(results)
+                resolve(results)
+            });
+            
+        })
+    })
+}
+
+module.exports = { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin, getFiles }

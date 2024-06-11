@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin } = require('../utils/salesforce.utils') 
+const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin, getFiles } = require('../utils/salesforce.utils') 
 
 router.get('/routes/records', (req, res) => {
 
@@ -61,6 +61,18 @@ router.post('/routes/notify', (req, res) => {
     notifySalesforceAdmin(req.body)
     .then(response => res.status(201).json({ message: 'Notification has been sent!' }))
     .catch(error => res.json({ error: error }))
+})
+
+router.get('/account/files', (req, res) => {
+
+    let { accountId } = req.query
+    console.log('accountId : ', accountId)
+
+    getFiles(accountId).then(files => {
+        res.json({ files : files })
+    }).catch(error => {
+        console.log('error : ', error)
+    })
 })
 
 module.exports = router
