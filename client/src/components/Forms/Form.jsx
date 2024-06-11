@@ -57,6 +57,8 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
             console.log('base64files ; ',base64files)
             setImages(base64files)
             setImageLoading(false)
+        }).catch(error => {
+            console.log('ERROR GET RELATED FILES ')
         })
     }
 
