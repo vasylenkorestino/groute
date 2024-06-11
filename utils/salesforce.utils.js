@@ -229,7 +229,7 @@ const getFiles = (accountId) => {
                 resolve([])
                 return; 
             }
-            let versions = await getRecords("SELECT Id, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN (" + documentIds + ")")
+            let versions = await getRecords("SELECT Id, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN (" + documentIds + ") ORDER BY CreatedDate DESC")
             
             console.log('versions : ', versions)
             versions && versions.forEach(v => {
