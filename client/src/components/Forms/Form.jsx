@@ -9,6 +9,8 @@ import Button from 'react-bootstrap/Button'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { Carousel } from 'rsuite';
+
 import { ThreeDots } from  'react-loader-spinner'
 
 import { SelectPicker, Input, Toggle, InputGroup, } from 'rsuite'
