@@ -217,7 +217,7 @@ const getFiles = (accountId) => {
             let accountName = account?.Name
 
             if(accountName.includes("'")){
-                accountName = accountName.replaceAll("'", "\'")
+                accountName = accountName.replace(/'/g, "\\'")
             }
             console.log('after accountName : ', accountName)
 
