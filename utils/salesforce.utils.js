@@ -214,7 +214,14 @@ const getFiles = (accountId) => {
 
             console.log('account : ', account)
 
-            let links = await getRecords("SELECT Id, ContentDocumentId FROM ContentDocumentLink WHERE ContentDocument.Title = '" + account.Name + "' AND LinkedEntityId = '" + accountId + "'")
+            let accountName = account?.Name
+
+            if(accountName.includes("'")){
+                accountName = accountName.replaceAll("'", "\'")
+            }
+            console.log('after accountName : ', accountName)
+
+            let links = await getRecords("SELECT Id, ContentDocumentId FROM ContentDocumentLink WHERE ContentDocument.Title = '" + accountName + "' AND LinkedEntityId = '" + accountId + "'")
             
             let documentIds = ''
             let count = 0
@@ -233,10 +240,6 @@ const getFiles = (accountId) => {
                 return; 
             }
 
-            if(documentIds.includes("'")){
-                documentIds = documentIds.replaceAll("'", "\'")
-            }
-            console.log('after documentIds : ', documentIds)
             let versions = await getRecords("SELECT Id, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN (" + documentIds + ") ORDER BY CreatedDate DESC")
             
             console.log('versions : ', versions)
