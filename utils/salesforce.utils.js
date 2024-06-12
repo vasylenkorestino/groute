@@ -232,6 +232,11 @@ const getFiles = (accountId) => {
                 resolve([])
                 return; 
             }
+
+            if(documentIds.includes("'")){
+                documentIds = documentIds.replaceAll("'", "\'")
+            }
+            console.log('after documentIds : ', documentIds)
             let versions = await getRecords("SELECT Id, ContentDocumentId FROM ContentVersion WHERE ContentDocumentId IN (" + documentIds + ") ORDER BY CreatedDate DESC")
             
             console.log('versions : ', versions)
