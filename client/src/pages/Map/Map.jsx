@@ -20,6 +20,7 @@ const Map = ({ origin, destination, waypoints }) => {
     };
 
 
+
     const calculateRoute = () => {
 
         Object.defineProperty(Array.prototype, 'chunk_array', {
@@ -44,17 +45,28 @@ const Map = ({ origin, destination, waypoints }) => {
             let parts = waypoints.chunk_array(25)
 
             console.log('parts: ',parts)
+            let results = []
+
+            let updated_origin = undefined
             parts.forEach(part => {
+                console.log('updated_origin: ', updated_origin)
+
+                let currentOrigin = updated_origin ? updated_origin : origin
+                let currentDestination = part.length == 25 ? part[part.length - 1].location : destination
+                
                 const request = {
-                    origin,
-                    destination,
+                    origin: currentOrigin,
+                    destination: currentDestination,
                     waypoints: part,
                     travelMode: 'DRIVING', // or 'WALKING', 'BICYCLING', 'TRANSIT'
                 };
+
+                updated_origin = part[part.length - 1].location
         
                 directionsServiceRef.current.route(request, (result, status) => {
                 if (status === 'OK') {
                     directionsRendererRef.current.setDirections(result);
+                    results.push(result)
                 } else {
                     console.error(`error fetching directions ${result}`);
                 }
