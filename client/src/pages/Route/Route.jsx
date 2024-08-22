@@ -112,18 +112,18 @@ const Route = ({ user }) => {
                 lat: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Latitude__c,
                 lng: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Longitude__c
             })
-
+            console.log('origin: ', origin)
             setDestination({ 
                 lat: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Latitude__c,
                 lng: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Longitude__c
             })
-
+            console.log('destination: ', destination)
             let waypoints = []
 
             groutes.forEach(p => {
                 waypoints.push({ location: { lat: p.Latitude__c, lng: p.Longitude__c } })
             })
-
+            console.log('waypoints: ', waypoints)
             setWaypoints(waypoints)
         }
 
