@@ -24,7 +24,7 @@ const getRoutes = (driverName, dateOfService) => {
         //console.log('dateOfServicePart : ', dateOfServicePart)
 
         let query = "SELECT Id, RecordType.Name, ServiceType__c, ServiceSubType__c, Account__c, Account__r.Notes__c, AccountId__c, Account_Name__c, Container_Address__c, DateOfService__c, Distance_From_Start__c, Driver_Name__c, " +  
-                    "Inactive__c, Gallons_Collected__c, Notes__c, Notes2__c, Driver_Notes__c, Service_Completed__c, Map_source__c, LastModifiedDate, Latitude__c, Longitude__c, " + 
+                    "Inactive__c, Gallons_Collected__c, Notes__c, Notes2__c, Driver_Notes__c, Service_Completed__c, Map_source__c, LastModifiedDate, Latitude__c, Longitude__c, GRoute_Id__r.Service_Location_Start__r.Longitude__c, GRoute_Id__r.Service_Location_End__r.Latitude__c, GRoute_Id__r.Service_Location_End__r.Longitude__c, " + 
                     "Google_Route_Id__c, Name, Status__c, Priority__c, Container_Size__c, Rebate__c " +
                     "FROM Route__c " + 
                     "WHERE Google_Route_Id__c!= null " +
