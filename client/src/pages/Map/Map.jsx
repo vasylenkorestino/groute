@@ -19,26 +19,66 @@ const Map = ({ origin, destination, waypoints }) => {
         calculateRoute();
     };
 
+
     const calculateRoute = () => {
+
+        Object.defineProperty(Array.prototype, 'chunk_array', {
+            value: function(chunkSize) {
+              var array = this;
+              return [].concat.apply([],
+                array.map(function(elem, i) {
+                  return i % chunkSize ? [] : [array.slice(i, i + chunkSize)];
+                })
+              );
+            }
+          });
+
         if (!directionsServiceRef.current || !directionsRendererRef.current) {
             return;
         }
 
-        const request = {
-            origin,
-            destination,
-            waypoints,
-            travelMode: 'DRIVING', // or 'WALKING', 'BICYCLING', 'TRANSIT'
-        };
+        console.log('waypoints length: ', waypoints.length)
 
-        directionsServiceRef.current.route(request, (result, status) => {
-        if (status === 'OK') {
-            directionsRendererRef.current.setDirections(result);
+        if(waypoints.length > 25){
+
+            let parts = waypoints.chunk_array(25)
+
+            console.log('parts: ',parts)
+            parts.forEach(part => {
+                const request = {
+                    origin,
+                    destination,
+                    waypoints: part,
+                    travelMode: 'DRIVING', // or 'WALKING', 'BICYCLING', 'TRANSIT'
+                };
+        
+                directionsServiceRef.current.route(request, (result, status) => {
+                if (status === 'OK') {
+                    directionsRendererRef.current.setDirections(result);
+                } else {
+                    console.error(`error fetching directions ${result}`);
+                }
+                });
+            })
+
         } else {
-            console.error(`error fetching directions ${result}`);
+            const request = {
+                origin,
+                destination,
+                waypoints,
+                travelMode: 'DRIVING', // or 'WALKING', 'BICYCLING', 'TRANSIT'
+            };
+    
+            directionsServiceRef.current.route(request, (result, status) => {
+            if (status === 'OK') {
+                directionsRendererRef.current.setDirections(result);
+            } else {
+                console.error(`error fetching directions ${result}`);
+            }
+            });
         }
-        });
     };
+
 
     return (
         <div style={{ height: '75vh', width: '100%' }}>
