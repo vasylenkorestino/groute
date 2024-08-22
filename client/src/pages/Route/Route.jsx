@@ -14,6 +14,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import RouteCard from '../../components/RouteCard/RouteCard'
 
+import { isMobile } from 'react-device-detect'
+import Map from '../Map/Map'
+
 const Route = ({ user }) => {
 
     const { isAdmin } = useContext(AuthContext)
@@ -90,12 +93,41 @@ const Route = ({ user }) => {
 
     const [filter, setFilter] = useState({ driverName: null, dateOfService: null })
 
+    const [origin, setOrigin] = useState({ lat: 0, lng: 0 })//{ lat: 37.77, lng: -122.447 }) //
+
+    const [destination, setDestination] = useState({ lat: 0, lng: 0 })//{ lat: 37.768, lng: -122.511 }) //
+
+    const [waypoints, setWaypoints] = useState([]) //{ location: { lat: 38.768, lng: -122.511 } }
+
     useEffect(() => {
         if(!filter.driverName){ setFilter( f => ({ ...f, driverName: user.userName })) }
         if(!filter.dateOfService){ setFilter( f => ({ ...f, dateOfService: new Date() })) }
         getDrivers()
         getRoutes(filter)
-    }, [ filter ])
+
+        console.log('groutes :', groutes )
+
+        if(groutes && groutes.length){
+            setOrigin({ 
+                lat: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Latitude__c,
+                lng: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Longitude__c
+            })
+
+            setDestination({ 
+                lat: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Latitude__c,
+                lng: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Longitude__c
+            })
+
+            let waypoints = []
+
+            groutes.forEach(p => {
+                waypoints.push({ location: { lat: p.Latitude__c, lng: p.Longitude__c } })
+            })
+
+            setWaypoints(waypoints)
+        }
+
+    }, [ filter, groutes.length ])
 
     const handleChangeDate = (event) => {
         setIsReady(false)
@@ -141,8 +173,26 @@ const Route = ({ user }) => {
                     :
                         groutes && groutes.length 
                         ? 
-                            <>
-                                <List size="lg" autoScroll hover sortable>
+
+                        
+                        isMobile
+                        ?
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ width: '100%', height: '75vh' }}>
+
+                            { 
+                                origin && destination && waypoints.length 
+                                ?
+                                <Map origin={origin} destination={destination} waypoints={waypoints} />
+                                :
+                                <></>
+                            }
+
+                            </div>
+
+                            <div style={{ width: '100%', overflowY: 'scroll', height: '75vh' }}>
+
+                                <List size="sm" autoScroll hover sortable>
                                     { 
                                         groutes && groutes.map((route, index) => (
                                             <List.Item key={index} index={index} className={ route.style }>
@@ -154,7 +204,40 @@ const Route = ({ user }) => {
                                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center', height: 100 }}>
                                     <Button style={{ width: '90%', height: 60 }} size="lg" onClick={handleNotify}>Send Notification</Button>
                                 </div>
-                            </>
+
+                            </div>
+                        </div>
+                        :
+                        <div style={{ display: 'flex' }}>
+                            <div style={{ width: '60%' }}>
+
+                            { 
+                                origin && destination && waypoints.length 
+                                ?
+                                <Map origin={origin} destination={destination} waypoints={waypoints} />
+                                :
+                                <></>
+                            }
+
+                            </div>
+
+                            <div style={{ width: '40%', overflowY: 'scroll', height: '75vh' }}>
+
+                                <List size="sm" autoScroll hover sortable>
+                                    { 
+                                        groutes && groutes.map((route, index) => (
+                                            <List.Item key={index} index={index} className={ route.style }>
+                                                <RouteCard route={ route } endpoint={ endpoint } columns={ columns } reload={ () => getRoutes(filter) }/>
+                                            </List.Item>
+                                        ))
+                                    }
+                                </List>
+                                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center', height: 100 }}>
+                                    <Button style={{ width: '90%', height: 60 }} size="lg" onClick={handleNotify}>Send Notification</Button>
+                                </div>
+
+                            </div>
+                        </div>
                         :
                         <div style={{ height: 300 }} className="display-6 d-flex justify-content-center align-items-center">Routes for { filter.driverName } not found!</div> 
                 }
