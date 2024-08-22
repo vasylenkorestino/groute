@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 
 const Map = ({ origin, destination, waypoints }) => {
 
-    const GOOGLE_MAPS_APIKEY = process.env.GOOGLE_API_KEY
+    const GOOGLE_MAPS_APIKEY = 'AIzaSyBzMCy3yqeHZ_zRvgTMyghoAGAEBYRo-b0'
 
     const mapRef = useRef(null);
     const directionsServiceRef = useRef(null);
