@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import GoogleMapReact from 'google-map-react';
 
 import locationIcon from '../../img/locationIcon.png'
+import serviceLocationIcon from '../../img/serviceLocationIcon.png'
 
 const Map = ({ origin, destination, waypoints }) => {
 
@@ -44,6 +45,57 @@ const Map = ({ origin, destination, waypoints }) => {
         }
 
         console.log('waypoints length: ', waypoints.length)
+
+        // Set Origin Marker
+
+        let locationName = origin?.name
+        delete origin.name
+
+        let originMarker = new maps.Marker({
+            position: origin,
+            map,
+            icon: {
+                url: serviceLocationIcon,
+                scaledSize: new maps.Size(45, 45)
+            }
+        })
+
+        let originMarkerLocationNameInfoWindow = new maps.InfoWindow()
+
+        originMarker.addListener('click', () => {
+            console.log("Click");
+            originMarkerLocationNameInfoWindow.setContent(
+                '<p style="color: black;">Service Location: ' + locationName + '</p>'
+            );
+            originMarkerLocationNameInfoWindow.open(map, originMarker);
+        })
+
+        // Set Destination Marker
+
+        let destinationName = destination?.name
+
+        delete  destination.name
+
+        let destinationMarker = new maps.Marker({
+            position: destination,
+            map,
+            icon: {
+                url: serviceLocationIcon,
+                scaledSize: new maps.Size(45, 45)
+            }
+        })
+
+        let destinationMarkerLocationNameInfoWindow = new maps.InfoWindow()
+
+        destinationMarker.addListener('click', () => {
+            console.log("Click");
+            destinationMarkerLocationNameInfoWindow.setContent(
+                '<p style="color: black;">Service Location: ' + destinationName + '</p>'
+            );
+            destinationMarkerLocationNameInfoWindow.open(map, originMarker);
+        })
+
+        // Set Waypoints Markers
 
         console.log('BEFORE')
         waypoints.forEach(w => {
@@ -126,8 +178,7 @@ const Map = ({ origin, destination, waypoints }) => {
             }
             });
         }
-    };
-
+    }
 
     return (
         <div style={{ height: '75vh', width: '100%' }}>

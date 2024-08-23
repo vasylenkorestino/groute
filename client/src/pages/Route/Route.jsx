@@ -93,9 +93,9 @@ const Route = ({ user }) => {
 
     const [filter, setFilter] = useState({ driverName: null, dateOfService: null })
 
-    const [origin, setOrigin] = useState({ lat: 0, lng: 0 })//{ lat: 37.77, lng: -122.447 }) //
+    const [origin, setOrigin] = useState({ name: '', lat: 0, lng: 0 })//{ lat: 37.77, lng: -122.447 }) //
 
-    const [destination, setDestination] = useState({ lat: 0, lng: 0 })//{ lat: 37.768, lng: -122.511 }) //
+    const [destination, setDestination] = useState({ name: '', lat: 0, lng: 0 })//{ lat: 37.768, lng: -122.511 }) //
 
     const [waypoints, setWaypoints] = useState([]) //{ location: { lat: 38.768, lng: -122.511 } }
 
@@ -109,11 +109,13 @@ const Route = ({ user }) => {
 
         if(groutes && groutes.length){
             setOrigin({ 
+                name: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Name,
                 lat: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Latitude__c,
                 lng: groutes[0]?.GRoute_Id__r?.Service_Location_Start__r?.Longitude__c
             })
             console.log('origin: ', origin)
             setDestination({ 
+                name: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Name,
                 lat: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Latitude__c,
                 lng: groutes[0]?.GRoute_Id__r?.Service_Location_End__r?.Longitude__c
             })
