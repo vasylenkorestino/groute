@@ -121,7 +121,7 @@ const Route = ({ user }) => {
             let waypoints = []
 
             groutes.forEach(p => {
-                waypoints.push({ location: { lat: p.Latitude__c, lng: p.Longitude__c } })
+                waypoints.push({ point: p, location: { lat: p.Latitude__c, lng: p.Longitude__c } })
             })
             console.log('waypoints: ', waypoints)
             setWaypoints(waypoints)

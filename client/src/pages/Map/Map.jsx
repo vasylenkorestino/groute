@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import GoogleMapReact from 'google-map-react';
 
+import locationIcon from '../../img/locationIcon.png'
+
 const Map = ({ origin, destination, waypoints }) => {
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyBzMCy3yqeHZ_zRvgTMyghoAGAEBYRo-b0'
@@ -13,15 +15,16 @@ const Map = ({ origin, destination, waypoints }) => {
 
         mapRef.current = map;
         directionsServiceRef.current = new maps.DirectionsService();
-        directionsRendererRef.current = new maps.DirectionsRenderer();
+        directionsRendererRef.current = new maps.DirectionsRenderer({
+            map: map,
+            suppressMarkers: true
+        })
         directionsRendererRef.current.setMap(map);
 
-        calculateRoute();
+        calculateRoute(map, maps);
     };
 
-
-
-    const calculateRoute = () => {
+    const calculateRoute = (map, maps) => {
 
         Object.defineProperty(Array.prototype, 'chunk_array', {
             value: function(chunkSize) {
@@ -32,13 +35,45 @@ const Map = ({ origin, destination, waypoints }) => {
                 })
               );
             }
-          });
+        });
 
         if (!directionsServiceRef.current || !directionsRendererRef.current) {
             return;
         }
 
         console.log('waypoints length: ', waypoints.length)
+
+        console.log('BEFORE')
+        waypoints.forEach(w => {
+            let marker = new maps.Marker({
+                position: w.location,
+                map,
+                icon: {
+                    url: locationIcon,
+                    scaledSize: new maps.Size(35, 35)
+                }
+            });
+    
+            let infoWindow = new maps.InfoWindow();
+
+            let accountName = w?.point?.Account_Name__c
+            let containerAddress = w?.point?.Container_Address__c
+            let contactName = w?.point?.Account__r?.Primary_Contact__r?.Name
+            let contactPhone = w?.point?.Account__r?.Primary_Contact__r?.Phone
+    
+            marker.addListener('click', () => {
+                console.log("Click");
+                infoWindow.setContent(
+                    '<p style="color: black;">Account Name: ' + accountName + '</p>' + 
+                    '<p style="color: black;">Address: ' + containerAddress +  '</p>' +
+                    '<p style="color: black;">Contact Name: ' + contactName +  '</p>' +
+                    '<p style="color: black;">Contact Phone: ' + contactPhone +  '</p>'
+                );
+                infoWindow.open(map, marker);
+            })
+
+            delete w.point
+        })
 
         if(waypoints.length > 25){
 
