@@ -21,21 +21,23 @@ const Map = ({ origin, destination, waypoints }) => {
         })
         directionsRendererRef.current.setMap(map);
 
+        if(!Object.prototype.hasOwnProperty.call(Array.prototype, 'chunk_array')) {
+            Object.defineProperty(Array.prototype, 'chunk_array', {
+                value: function(chunkSize) {
+                var array = this;
+                return [].concat.apply([],
+                    array.map(function(elem, i) {
+                    return i % chunkSize ? [] : [array.slice(i, i + chunkSize)];
+                    })
+                );
+                }
+            });
+        }
+
         calculateRoute(map, maps);
     };
 
     const calculateRoute = (map, maps) => {
-
-        Object.defineProperty(Array.prototype, 'chunk_array', {
-            value: function(chunkSize) {
-              var array = this;
-              return [].concat.apply([],
-                array.map(function(elem, i) {
-                  return i % chunkSize ? [] : [array.slice(i, i + chunkSize)];
-                })
-              );
-            }
-        });
 
         if (!directionsServiceRef.current || !directionsRendererRef.current) {
             return;
