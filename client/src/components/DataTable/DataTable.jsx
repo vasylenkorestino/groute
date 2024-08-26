@@ -87,7 +87,7 @@ const DataTable = ({ endpoint, columns }) => {
                         </div>
                         <div style={{ width: isMobile ? '85%' : '100%', display: 'flex', justifyContent: 'flex-end' }}>
                             <InputGroup inside style={{ width: !isMobile ? 400 : 200 }}>
-                                <Input name='name' placeholder='Type product name...' onChange={ handleFilterParams } />
+                                <Input name='name' placeholder='Type user name...' onChange={ handleFilterParams } />
                                 <InputGroup.Button>
                                 <SearchIcon />
                                 </InputGroup.Button>
