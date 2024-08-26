@@ -15,7 +15,7 @@ const Routes = () => {
     const endpoint = '/api/users'
     const columns = [
         { name: 'Name', apiName: 'driverName', type: 'name', width: 220, order: 1, modalOrder: 1, hideCell: false }, 
-        { name: 'Email', apiName: 'email', type: 'text', width: 1300, order: 2, modalOrder: 2, hideCell: false },
+        { name: 'Email', apiName: 'email', type: 'text', width: 840, order: 2, modalOrder: 2, hideCell: false },
         { name: 'User Name', apiName: 'username', type: 'text', width: 300, order: 3, modalOrder: 3, hideCell: true },  
         { name: 'Password', apiName: 'password', type: 'password', width: 100, order: 4, modalOrder: 4, hideCell: true },
         { name: 'Salesforce User', apiName: 'sfUser', type: 'select', width: 100, order: 5, modalOrder: 5, hideCell: true, data: drivers.map(driver => ({ label: driver.Name, value: driver.Id })) }, 
