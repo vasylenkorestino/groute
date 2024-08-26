@@ -98,7 +98,7 @@ const DataTable = ({ endpoint, columns }) => {
                 </Header>
                 <Content>
                     <div style={{ width: isMobile ? '85%' : '100%', margin: 20 }}>
-                        <Table height={300} data={ records } loading={ !loading }>
+                        <Table height={600} data={ records } loading={ !loading }>
 
                         { columns.sort((a, b) => { return a.order - b.order }).map(column => {
                             if(isMobile){ 
