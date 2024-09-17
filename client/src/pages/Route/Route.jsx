@@ -180,17 +180,9 @@ const Route = ({ user }) => {
                         isMobile
                         ?
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ width: '100%', height: '75vh' }}>
-
-                            { 
-                                origin && destination && waypoints.length 
-                                ?
+                            <Panel header="Map" collapsible bordered>
                                 <Map origin={origin} destination={destination} waypoints={waypoints} />
-                                :
-                                <></>
-                            }
-
-                            </div>
+                            </Panel>
 
                             <div style={{ width: '100%', overflowY: 'scroll', height: '75vh' }}>
 
