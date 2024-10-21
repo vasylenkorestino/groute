@@ -64,7 +64,7 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
                                     route.ServiceSubType__c && <div className="lead mb-0"> Service Sub Type: { route.ServiceSubType__c } </div>
                                 }
                                 <div className="lead mb-0"> ContainerSize: { route.Container_Size__c } </div>
-                                <div className="lead mb-0"> Special Instructions: { route.Account__r.Notes__c } </div>
+                                <div className="lead mb-0"> Special Instructions: { route.specialInstructions } </div>
                             </div>
                         </div></Col>
                     <Col xs={5} className='d-flex justify-content-center align-items-center'>
