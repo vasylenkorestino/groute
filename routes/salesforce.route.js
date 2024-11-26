@@ -1,6 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 
+const { DateTime } = require('luxon');
+
 const { getRecords, getRoutes, updateRoute, getDrivers, uploadContentVersion, notifySalesforceAdmin, getFiles } = require('../utils/salesforce.utils') 
 
 router.get('/routes/records', (req, res) => {
@@ -13,7 +15,12 @@ router.get('/routes/records', (req, res) => {
     console.log('driverName : ', driverName)
 
     if(dateOfService){
-        dateOfService = new Date(dateOfService).toISOString().split("T")[0] 
+        //dateOfService = new Date(dateOfService).toISOString().split("T")[0] 
+        dateOfService = new Date(dateOfService).toISOString()
+        let formattedDate = DateTime.fromISO(dateOfService, { zone: 'America/New_York' });
+        console.log('formattedDate: ', formattedDate)
+
+        dateOfService = formattedDate.toFormat('yyyy-MM-dd')
     }
 
     console.log('dateOfService2 : ', dateOfService)
