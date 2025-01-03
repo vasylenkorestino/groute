@@ -19,6 +19,9 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
 
     const handleClose = () => {
         setShow(!show)
+    }
+
+    const handleCloseForm = () => {
         reload()
     }
 
@@ -46,7 +49,7 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
 
     return (
         <div>
-            <ModalWindow show={ show } close={ handleClose } context={ < InputForm endpoint={ endpoint } columns={ updatedColumns } close={ handleClose } title={ 'Complete Route' } record={ route } mode='salesforce' hasImages={true} /> } />
+            <ModalWindow show={ show } close={ handleClose } context={ < InputForm endpoint={ endpoint } columns={ updatedColumns } close={ handleCloseForm } title={ 'Complete Route' } record={ route } mode='salesforce' hasImages={true} /> } />
             <Panel>
                 <Row className="show-grid d-flex justify-content-center align-items-center">
                     <Col xs={5} className='d-flex justify-content-center align-items-center'>

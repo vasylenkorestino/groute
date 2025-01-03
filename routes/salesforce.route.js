@@ -34,6 +34,8 @@ router.get('/routes/records', (req, res) => {
             
             let style = route.Status__c == 'New' ? 'bg-empty' : ( route.Inactive__c ? 'bg-unserviced' : 'bg-serviced')
 
+            route['isDone'] = route.Status__c == 'New' ? false : true
+
             route['specialInstructions'] = route?.Account__r?.Notes__c ? route?.Account__r.Notes__c : ''
             
             route['style'] = style;

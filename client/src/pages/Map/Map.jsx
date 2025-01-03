@@ -1,16 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import GoogleMapReact from 'google-map-react';
 
 import locationIcon from '../../img/locationIcon.png'
 import serviceLocationIcon from '../../img/serviceLocationIcon.png'
+import greenPointIcon from '../../img/greenPoint.png'
+import { DataContext } from '../../contexts/DataContext';
 
-const Map = ({ origin, destination, waypoints }) => {
+
+
+const Map = ({ origin, destination }) => {
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyBzMCy3yqeHZ_zRvgTMyghoAGAEBYRo-b0'
 
     const mapRef = useRef(null);
     const directionsServiceRef = useRef(null);
     const directionsRendererRef = useRef(null);
+
+    const { groutes } = useContext(DataContext)
+
+    const [waypoints, setWaypoints] = useState([])
+    const [isValid, setIsValid] = useState(false)
+
+    useEffect(() => {
+        console.log('WAYPOINTS UPDATED!')
+        if(groutes?.length){
+            
+            let waypoints = []
+            groutes.forEach(p => {
+                waypoints.push({ point: p, location: { lat: p.Latitude__c, lng: p.Longitude__c } })
+            })
+            console.log('waypoints: ', waypoints)
+            setWaypoints(waypoints)
+            
+            setIsValid(false)
+            setInterval(() => {
+                setIsValid(true)
+            }, 300)
+        } else {
+            setIsValid(false)
+        }
+
+    }, [ groutes ])
 
     const handleApiLoaded = (map, maps) => {
 
@@ -103,8 +133,8 @@ const Map = ({ origin, destination, waypoints }) => {
                 position: w.location,
                 map,
                 icon: {
-                    url: locationIcon,
-                    scaledSize: new maps.Size(35, 35)
+                    url: w?.point?.isDone ? greenPointIcon : locationIcon,
+                    scaledSize: new maps.Size(w?.point?.isDone ? 25 : 35, 35)
                 }
             });
     
@@ -182,14 +212,21 @@ const Map = ({ origin, destination, waypoints }) => {
 
     return (
         <div style={{ height: '75vh', width: '100%' }}>
-            <GoogleMapReact
-                bootstrapURLKeys={{ key: GOOGLE_MAPS_APIKEY }}
-                defaultCenter={origin}
-                defaultZoom={13}
-                zoom={20}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-            />
+            {
+                isValid
+                ?
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: GOOGLE_MAPS_APIKEY }}
+                    defaultCenter={origin}
+                    defaultZoom={13}
+                    zoom={20}
+                    yesIWantToUseGoogleMapApiInternals
+                    onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                />
+                :
+                <></>
+            }
+            
         </div>
     );
 }
