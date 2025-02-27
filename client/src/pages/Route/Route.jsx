@@ -33,7 +33,7 @@ const Route = ({ user }) => {
             order: 2, 
             modalOrder: 2, 
             hideCell: false, 
-            data: ['Not Collected - Low', 'Not Collected - Empty', 'Inaccessible', 'Restaurant Closed'].map(item => ({ label: item, value: item })) 
+            data: ['Not Collected - Low', 'Not Collected - Empty', 'Not Collected - Tank Missing', 'Inaccessible', 'Restaurant Closed'].map(item => ({ label: item, value: item })) 
         },
         { 
             name: 'Gallons', 
