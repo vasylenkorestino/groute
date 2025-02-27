@@ -35,7 +35,7 @@ const RouteCard = ({ route, endpoint, columns, reload }) => {
 
                 updated.forEach(column => {
                     if(column.name == 'Service Issues'){
-                        column.data = column.data.filter(c => ( c.value != 'Not Collected - Low' && c.value != 'Not Collected - Empty' ))
+                        column.data = column.data.filter(c => ( c.value != 'Not Collected - Low' && c.value != 'Not Collected - Empty' && c.value != 'Not Collected - Tank Missing' ))
                     }
                 })
                 setUpdatedColumns(updated)
