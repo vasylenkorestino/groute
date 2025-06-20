@@ -3,6 +3,7 @@ import GoogleMapReact from 'google-map-react';
 
 import locationIcon from '../../img/locationIcon.png'
 import serviceLocationIcon from '../../img/serviceLocationIcon.png'
+import fullPointIcon from '../../img/orangeIcon.png'
 import greenPointIcon from '../../img/greenPoint.png'
 import { DataContext } from '../../contexts/DataContext';
 
@@ -129,11 +130,20 @@ const Map = ({ origin, destination }) => {
 
         console.log('BEFORE')
         waypoints.forEach(w => {
+
+            let icon
+
+            console.log('w?.point?.isFull__c : ', w?.point)
+            console.log('w?.point?.isFull__c : ', w?.point?.Account_Name__c)
+            console.log('w?.point?.isFull : ', w?.point?.isFull)
+            
+            icon = w?.point?.isDone ? greenPointIcon : ( w?.point?.isFull ? fullPointIcon : locationIcon )
+
             let marker = new maps.Marker({
                 position: w.location,
                 map,
                 icon: {
-                    url: w?.point?.isDone ? greenPointIcon : locationIcon,
+                    url: icon,
                     scaledSize: new maps.Size(w?.point?.isDone ? 25 : 35, 35)
                 }
             });
@@ -166,6 +176,9 @@ const Map = ({ origin, destination }) => {
             console.log('parts: ',parts)
             let results = []
 
+            let fullPath = [];
+            let promises = [];
+
             let updated_origin = undefined
             parts.forEach(part => {
                 console.log('updated_origin: ', updated_origin)
@@ -181,16 +194,66 @@ const Map = ({ origin, destination }) => {
                 };
 
                 updated_origin = part[part.length - 1].location
+
+                const promise = new Promise((resolve, reject) => {
+                    directionsServiceRef.current.route(request, (result, status) => {
+                        if (status === 'OK') {
+                            let segmentPath = result.routes[0].overview_path;
+                            fullPath = fullPath.concat(segmentPath);
+                            resolve();
+                        } else {
+                            reject(`error fetching directions ${status}`);
+                        }
+                    });
+                });
+
+                promises.push(promise);
         
-                directionsServiceRef.current.route(request, (result, status) => {
+                /*directionsServiceRef.current.route(request, (result, status) => {
                 if (status === 'OK') {
                     directionsRendererRef.current.setDirections(result);
                     results.push(result)
                 } else {
                     console.error(`error fetching directions ${result}`);
                 }
-                });
+                });*/
             })
+
+            Promise.all(promises)
+            .then(() => {
+
+                const lineSymbol = {
+                    path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 2.5,
+                    strokeColor: '#4285F4'
+                };
+                new maps.Polyline({
+                    path: fullPath,
+                    geodesic: true,
+                    strokeColor: '#4285F4', //'#FF8C00', //'#4285F4',
+                    strokeOpacity: 0.9,
+                    strokeWeight: 4,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '100%',
+                        repeat: '50px'
+                    }],
+                    map: mapRef.current
+                });
+
+
+                const bounds = new maps.LatLngBounds();
+
+                fullPath.forEach(point => bounds.extend(point));
+
+                mapRef.current.fitBounds(bounds, {
+                    top: 50, bottom: 0, left: 0, right: 0 // Зміщення вгору
+                });
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
 
         } else {
             const request = {
@@ -199,10 +262,42 @@ const Map = ({ origin, destination }) => {
                 waypoints,
                 travelMode: 'DRIVING', // or 'WALKING', 'BICYCLING', 'TRANSIT'
             };
+
+            let fullPath = []
     
             directionsServiceRef.current.route(request, (result, status) => {
             if (status === 'OK') {
-                directionsRendererRef.current.setDirections(result);
+                let segmentPath = result.routes[0].overview_path;
+                fullPath = fullPath.concat(segmentPath);
+                //directionsRendererRef.current.setDirections(result);
+
+                const lineSymbol = {
+                    path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 2.5,
+                    strokeColor: '#4285F4'
+                };
+                new maps.Polyline({
+                    path: fullPath,
+                    geodesic: true,
+                    strokeColor: '#4285F4', //'#FF8C00', //'#4285F4',
+                    strokeOpacity: 0.9,
+                    strokeWeight: 4,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '100%',
+                        repeat: '50px'
+                    }],
+                    map: mapRef.current
+                });
+                
+                const bounds = new maps.LatLngBounds();
+
+                fullPath.forEach(point => bounds.extend(point));
+
+                mapRef.current.fitBounds(bounds, {
+                    top: 50, bottom: 0, left: 0, right: 0 // Зміщення вгору
+                });
+
             } else {
                 console.error(`error fetching directions ${result}`);
             }
