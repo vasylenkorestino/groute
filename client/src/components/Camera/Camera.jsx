@@ -5,7 +5,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 
 import ModalWindow from '../Modal/Modal'
 
-import { InputGroup, } from 'rsuite'
+import { InputGroup, Radio, RadioGroup } from 'rsuite'
 import { BsFillCameraFill, BsSkipBackwardCircle } from 'react-icons/bs'
 import { CgArrowsExchangeV } from 'react-icons/cg'
 import { GrStatusGood } from 'react-icons/gr'
@@ -18,7 +18,7 @@ const CameraComponent = ({ setImageUrl, closeCamera }) => {
     const [image, setImage] = useState('');
 
     function handleTakePhotoAnimationDone (dataUri) {
-      console.log('takePhoto');
+      console.log('takePhoto', dataUri);
       setImage(dataUri);
     }
 

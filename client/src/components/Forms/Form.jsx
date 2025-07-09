@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { Carousel } from 'rsuite';
+import { Carousel, Radio, RadioGroup } from 'rsuite';
 
 import { ThreeDots } from  'react-loader-spinner'
 
@@ -17,6 +17,7 @@ import { SelectPicker, Input, Toggle, InputGroup, } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
 
 import { BsFillEyeSlashFill, BsFillCameraFill } from 'react-icons/bs';
+import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { FaRegEye } from 'react-icons/fa';
 
 import ModalWindow from '../Modal/Modal'
@@ -145,6 +146,32 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
         setImageUrls(imageUrls.filter(imageUrl => ( imageUrl != url )))
     }
 
+    const [fileMode, setFileMode] = useState('Upload');
+
+    const handleChangeFileMode = (event) => {
+        console.log('event : ', event)
+        setFileMode(event)
+    }
+
+    const openFileDialog = () => {
+        console.log('openFileDialog : ')
+        document.getElementById('fileInput').click();
+    }
+
+    const handleUploadFile = (event) => {
+        console.log('handleUploadFile : ')
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64 = reader.result
+            console.log('Base64 string:', base64);
+            setImageUrls([...imageUrls, base64])
+        };
+        reader.readAsDataURL(file);
+    }
+
     const getCameraInput = (column) => {
         return (
             <>
@@ -161,7 +188,30 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
                     )) : <></> } 
 
                     <div className="d-flex align-items-center m-1">
-                        <InputGroup.Button onClick={handleChangeCameraView}><BsFillCameraFill style={{ width: 50, height: 50 }} /></InputGroup.Button>
+                        <RadioGroup name="radio-group" defaultValue="Upload" onChange={handleChangeFileMode}>
+                            <Radio value="Upload">Upload <FileUploadIcon style={{ width: 20, height: 20 }} /></Radio>
+                            <Radio value="Camera">Camera <BsFillCameraFill style={{ width: 20, height: 20 }} /></Radio>
+                        </RadioGroup>
+
+                        <div style={{ marginLeft: 20 }}>
+                        {
+                            fileMode == 'Upload'
+                            ?
+                            <InputGroup.Button onClick={openFileDialog}>
+                                <FileUploadIcon style={{ width: 50, height: 50 }} />
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    style={{ display: 'none' }}
+                                    onChange={handleUploadFile}
+                                />
+                            </InputGroup.Button>
+                            :
+                            <InputGroup.Button onClick={handleChangeCameraView}>
+                                <BsFillCameraFill style={{ width: 50, height: 50 }} />
+                            </InputGroup.Button>
+                        }
+                        </div>
                         <ModalWindow show={ showCamera } close={ () => handleChangeCameraView() } context={ <Camera setImageUrl={ handleSetImageUrl } closeCamera={ handleChangeCameraView } /> }/>
                     </div>
                 </div>
