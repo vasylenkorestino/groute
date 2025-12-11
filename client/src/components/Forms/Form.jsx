@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 
+import heic2any from 'heic2any';
+
 import { DataContext } from '../../contexts/DataContext'
 
 import Form from 'react-bootstrap/Form'
@@ -52,7 +54,6 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
             files && files.forEach(f => {
                 let file = f[0]
                 let base64_response = `data:application/jpeg;base64,${file}`
-                console.log(base64_response)
                 base64files.push(base64_response)
             })
             console.log('base64files ; ',base64files)
@@ -87,8 +88,10 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
         .then(() => {
             if(imageUrls.length){
                 imageUrls.forEach(imageUrl => {
-                    uploadPhoto(endpoint, { fileName: record.Account_Name__c + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
+                    uploadPhoto(endpoint, { fileName: record.Account_Name__c  + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
                         console.log('response handleSetImageUrl : ', response)
+                    }).catch(error => {
+                        console.error('error : ', error )
                     })
                 })
             }
@@ -158,10 +161,19 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
         document.getElementById('fileInput').click();
     }
 
-    const handleUploadFile = (event) => {
+    const handleUploadFile = async (event) => {
         console.log('handleUploadFile : ')
         const file = event.target.files[0];
         if (!file) return;
+
+        if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
+            const blob = await heic2any({
+                blob: file,
+                toType: "image/jpeg",
+                quality: 0.9
+            });
+            file = new File([blob], file.name.replace('.heic', '.jpg'), { type: 'image/jpeg' });
+        }
 
         const reader = new FileReader();
         reader.onload = () => {
