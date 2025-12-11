@@ -8,7 +8,7 @@ const app = express();
 
 const PORT = process.env.PORT || 6000;
 
-const maxRequestBodySize = '1mb';
+const maxRequestBodySize = '25mb';
 
 //app.use(express.json({ extended: true} ))
 app.use(express.json({limit: maxRequestBodySize, extended: true }));
