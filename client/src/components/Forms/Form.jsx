@@ -163,7 +163,7 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
 
     const handleUploadFile = async (event) => {
         console.log('handleUploadFile : ')
-        const file = event.target.files[0];
+        let file = event.target.files[0];
         if (!file) return;
 
         if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
