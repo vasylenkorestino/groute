@@ -173,15 +173,52 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
                 quality: 0.9
             });
             file = new File([blob], file.name.replace('.heic', '.jpg'), { type: 'image/jpeg' });
-        }
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            const base64 = reader.result
-            console.log('Base64 string:', base64);
-            setImageUrls([...imageUrls, base64])
-        };
-        reader.readAsDataURL(file);
+            const compressedBase64 = await compressImageToBase64(file, 1200, 0.6);
+            console.log('compressedBase64:', compressedBase64);
+            setImageUrls([...imageUrls, compressedBase64])
+        } else {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result
+                console.log('Base64 string:', base64);
+                setImageUrls([...imageUrls, base64])
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // file: File from <input type="file">
+    // maxWidth: max width in px (image will be scaled down if larger)
+    // quality: 0–1 (only works for JPEG/WebP)
+    const compressImageToBase64 = async (file, maxWidth = 1280, quality = 0.7) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // keep aspect ratio, downscale if too large
+                const scale = Math.min(1, maxWidth / img.width);
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // get compressed base64 (here we force JPEG)
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                resolve(dataUrl);              // "data:image/jpeg;base64,...."
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+            };
+
+            reader.onerror = reject;
+            reader.readAsDataURL(file); // read original file
+        });
     }
 
     const getCameraInput = (column) => {
