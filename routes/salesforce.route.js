@@ -9,13 +9,12 @@ router.get('/routes/records', (req, res) => {
 
     console.log('req.query : ', req.query)
 
-    let { dateOfService, driverName } = req.query
+    let { dateOfService, driverName, googleRouteId } = req.query
 
     console.log('dateOfService1 : ', dateOfService)
     console.log('driverName : ', driverName)
 
     if(dateOfService){
-        //dateOfService = new Date(dateOfService).toISOString().split("T")[0] 
         dateOfService = new Date(dateOfService).toISOString()
         let formattedDate = DateTime.fromISO(dateOfService, { zone: 'America/New_York' });
         console.log('formattedDate: ', formattedDate)
@@ -25,10 +24,10 @@ router.get('/routes/records', (req, res) => {
 
     console.log('dateOfService2 : ', dateOfService)
 
-    getRoutes(driverName, dateOfService).then(routes => {
-        //console.log('routes : ', routes)
+    getRoutes(driverName, dateOfService, googleRouteId).then(result => {
+        let { routes, googleRoutes } = result;
 
-        let googleRoutes = [];
+        let processedRoutes = [];
         routes.forEach(route => {
             route['link'] = 'http://maps.apple.com/?daddr=' + route.Latitude__c + ',' + route.Longitude__c + '&dirflg=d&t=s';
             
@@ -39,11 +38,11 @@ router.get('/routes/records', (req, res) => {
             route['specialInstructions'] = route?.Account__r?.Notes__c ? route?.Account__r.Notes__c : ''
             
             route['style'] = style;
-            googleRoutes.push(route);
+            processedRoutes.push(route);
 
         })
 
-        res.json({ records : googleRoutes })
+        res.json({ records: processedRoutes, googleRoutes: googleRoutes || [] })
     })
 })
 

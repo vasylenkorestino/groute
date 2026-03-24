@@ -15,13 +15,12 @@ const getDrivers = () => {
     return getRecords('SELECT Id, Name FROM Driver__c')
 }
 
-const getRoutes = (driverName, dateOfService) => {
+/** Fetches Route__c records, filters by non-Complete Google Routes, supports route switching */
+const getRoutes = (driverName, dateOfService, googleRouteId) => {
     return new Promise((resolve, reject) => {
 
-        let driverNamePart = driverName ? `AND Groute_Id__r.DriverName__c = '${driverName}' ` : ''; // `AND Driver_Name__c = '${driverName}' `
+        let driverNamePart = driverName ? `AND Groute_Id__r.DriverName__c = '${driverName}' ` : '';
         let dateOfServicePart = dateOfService ? `AND DateOfService__c = ${dateOfService} ` : ''
-
-        //console.log('dateOfServicePart : ', dateOfServicePart)
 
         let query = "SELECT Id, RecordType.Name, ServiceType__c, ServiceSubType__c, Account__c, Account__r.Notes__c, AccountId__c, Account_Name__c,  Account__r.Primary_Contact__r.Name, Account__r.Primary_Contact__r.Phone, Container_Address__c, DateOfService__c, Distance_From_Start__c, Driver_Name__c, " +  
                     "Inactive__c, isFull__c, Gallons_Collected__c, Notes__c, Notes2__c, Driver_Notes__c, Service_Completed__c, Map_source__c, LastModifiedDate, Latitude__c, Longitude__c, " + 
@@ -36,18 +35,35 @@ const getRoutes = (driverName, dateOfService) => {
                 "LIMIT 50000"
 
         getRecords(query).then(routes => {
-            let googleRouteId = routes[0]?.Google_Route_Id__c;
-            //console.log('googleRouteId : ', googleRouteId)
-            if(googleRouteId){
-                let query = `SELECT Accounts__c FROM Google_Route__c WHERE Id = '${ googleRouteId }'`
-                getRecords(query).then(accounts => {
-                    let sortedRoutes = sortRoutes(accounts, routes)
-                    resolve(sortedRoutes)
-                })
-            } else {
-                resolve(routes)
+            let uniqueGoogleRouteIds = [...new Set(routes.map(r => r.Google_Route_Id__c).filter(Boolean))];
+
+            if(uniqueGoogleRouteIds.length === 0){
+                resolve({ routes, googleRoutes: [] });
+                return;
             }
-            
+
+            let idsString = uniqueGoogleRouteIds.map(id => `'${id}'`).join(',');
+            let grQuery = `SELECT Id, Name, Accounts__c, CompletionStatus__c FROM Google_Route__c WHERE Id IN (${idsString})`;
+
+            getRecords(grQuery).then(googleRouteRecords => {
+                let allIds = googleRouteRecords.map(gr => gr.Id);
+
+                let selectedId = (googleRouteId && allIds.includes(googleRouteId))
+                    ? googleRouteId
+                    : allIds[0];
+
+                let routesForSelected = routes.filter(r => r.Google_Route_Id__c === selectedId);
+                let selectedGR = googleRouteRecords.find(gr => gr.Id === selectedId);
+
+                if(selectedGR){
+                    routesForSelected = sortRoutes([selectedGR], routesForSelected);
+                }
+
+                resolve({
+                    routes: routesForSelected,
+                    googleRoutes: googleRouteRecords.map(gr => ({ Id: gr.Id, Name: gr.Name, isComplete: gr.CompletionStatus__c === 'Completed' }))
+                });
+            });
         })
     })
 }

@@ -9,6 +9,7 @@ export const useData = () => {
     const [records, setRecords] = useState([])
     const [drivers, setDrivers] = useState([])
     const [groutes, setRoutes] = useState([])
+    const [googleRouteOptions, setGoogleRouteOptions] = useState([])
     const [isNew, setIsNew] = useState(false)
     const [loading, setIsReady] = useState(false)
     //const [filter, setFilter] = useState({})
@@ -50,6 +51,7 @@ export const useData = () => {
             console.log('response getRoutes : ', data)
 
             setRoutes(data.records)
+            setGoogleRouteOptions(data.googleRoutes || [])
             setIsReady(true)
             resolve(data.records)
         })
@@ -147,6 +149,6 @@ export const useData = () => {
     }
 
 
-    return { record, records, drivers, groutes, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto, notifyAdmin, getFiles }
+    return { record, records, drivers, groutes, googleRouteOptions, isNew, loading, getAllRecords, getDrivers, getRoutes, setRecord, setRecords, setIsNew, setIsReady, upsertRecord, deleteRecord, cloneRecord, uploadPhoto, notifyAdmin, getFiles }
 
 }

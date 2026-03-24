@@ -20,7 +20,7 @@ import Map from '../Map/Map'
 const Route = ({ user }) => {
 
     const { isAdmin } = useContext(AuthContext)
-    const { drivers, groutes, getDrivers, getRoutes, setIsReady, loading, notifyAdmin } = useContext(DataContext)
+    const { drivers, groutes, googleRouteOptions, getDrivers, getRoutes, setIsReady, loading, notifyAdmin } = useContext(DataContext)
 
     const endpoint = 'api/salesforce/routes'
     const columns = [
@@ -91,7 +91,7 @@ const Route = ({ user }) => {
         }
     ]
 
-    const [filter, setFilter] = useState({ driverName: null, dateOfService: null })
+    const [filter, setFilter] = useState({ driverName: null, dateOfService: null, googleRouteId: null })
 
     const [origin, setOrigin] = useState({ name: '', lat: 0, lng: 0 })//{ lat: 37.77, lng: -122.447 }) //
 
@@ -131,6 +131,12 @@ const Route = ({ user }) => {
 
     }, [ filter, groutes.length ])
 
+    useEffect(() => {
+        if(!filter.googleRouteId && googleRouteOptions?.length){
+            setFilter( f => ({ ...f, googleRouteId: googleRouteOptions[0].Id }))
+        }
+    }, [ googleRouteOptions ])
+
     const handleChangeDate = (event) => {
         setIsReady(false)
         setFilter( f => ({ ...f, dateOfService: event }))
@@ -138,7 +144,12 @@ const Route = ({ user }) => {
 
     const handleChangeDriver = (event) => {
         setIsReady(false)
-        setFilter( f => ({ ...f, driverName: event }))
+        setFilter( f => ({ ...f, driverName: event, googleRouteId: null }))
+    }
+
+    const handleChangeGoogleRoute = (event) => {
+        setIsReady(false)
+        setFilter( f => ({ ...f, googleRouteId: event }))
     }
 
     const handleNotify = () => {
@@ -158,6 +169,28 @@ const Route = ({ user }) => {
                     <Col xs={12}>
                         { isAdmin && <SelectPicker size="lg" data={ drivers.map(driver => ({ label: driver.Name, value: driver.Name })) } style={{ width: 200, margin: 3 }} onChange={ handleChangeDriver } value={ filter.driverName } /> }
                         <DatePicker size="lg" style={{ width: 200, margin: 3 }} placeholder="Select Date" value={ filter.dateOfService } onOk={ e => handleChangeDate(e) }/>
+                        { googleRouteOptions && googleRouteOptions.length > 1 && 
+                            <SelectPicker 
+                                size="lg" 
+                                data={ googleRouteOptions.map(gr => ({ label: gr.Name, value: gr.Id, isComplete: gr.isComplete })) } 
+                                style={{ width: 250, margin: 3 }} 
+                                onChange={ handleChangeGoogleRoute } 
+                                value={ filter.googleRouteId } 
+                                placeholder="Switch Route"
+                                renderMenuItem={ (label, item) => (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.isComplete ? '#4caf50' : '#ff9800', display: 'inline-block' }} />
+                                        <span>{ label }</span>
+                                    </div>
+                                )}
+                                renderValue={ (value, item) => (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.isComplete ? '#4caf50' : '#ff9800', display: 'inline-block' }} />
+                                        <span>{ item.label }</span>
+                                    </div>
+                                )}
+                            /> 
+                        }
                     </Col>
                     <Col xs={12}>
                         <div className="d-flex justify-content-center display-3 mt-2" style={{ marginBottom: 70 }}>
