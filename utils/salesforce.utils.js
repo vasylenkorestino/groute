@@ -11,6 +11,9 @@ const creds = {
     password : process.env.SF_PASSWORD
 }
 
+console.log('SF_URL:', process.env.SF_URL);
+console.log('SF_USERNAME:', process.env.SF_USERNAME);
+
 const getDrivers = () => {
     return getRecords('SELECT Id, Name FROM Driver__c')
 }
