@@ -1,1 +1,7 @@
 .sfdx/
+node_modules/
+client/node_modules/
+client/build/
+.env
+.env.local
+.env.production

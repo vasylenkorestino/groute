@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
 
         if(!isMatched){ return res.status(300).json({ status: 'error', message: 'Incorect password' }) } 
 
-        const key = 'wuoehg79233gh782h723fhfoequhfuewfh732fh2873fhufwhufew'
+        const key = process.env.JWT_SECRET || 'default-dev-secret-change-me';
 
         const session = jwt.sign( { userId: user.id }, key, { expiresIn: '1h'});
 

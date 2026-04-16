@@ -265,7 +265,7 @@ const getFiles = (accountId) => {
                 console.log('a', v)
             })
 
-            let instanceUrl = 'https://gstarbio.my.salesforce.com/'
+            let instanceUrl = process.env.SF_INSTANCE_URL || conn.instanceUrl
             
             let promises = []
             versionIds.forEach(async (versionId) => {

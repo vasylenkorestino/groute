@@ -11,7 +11,7 @@ import { DataContext } from '../../contexts/DataContext';
 
 const Map = ({ origin, destination }) => {
 
-    const GOOGLE_MAPS_APIKEY = 'AIzaSyBzMCy3yqeHZ_zRvgTMyghoAGAEBYRo-b0'
+    const GOOGLE_MAPS_APIKEY = process.env.REACT_APP_GOOGLE_MAPS_APIKEY || ''
 
     const mapRef = useRef(null);
     const directionsServiceRef = useRef(null);
