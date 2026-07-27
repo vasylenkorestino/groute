@@ -11,9 +11,6 @@ const creds = {
     password : process.env.SF_PASSWORD
 }
 
-console.log('SF_URL:', process.env.SF_URL);
-console.log('SF_USERNAME:', process.env.SF_USERNAME);
-
 const getDrivers = () => {
     return getRecords('SELECT Id, Name FROM Driver__c')
 }
@@ -148,23 +145,30 @@ const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
             if (err) { 
                 console.error(err); 
                 reject(err);
+                return;
             }
             console.log('work 1: ')
             let data = fileBase64.toString('base64');
             data = data.split(',')[1]
+            if (!data) {
+                reject(new Error('Invalid fileBase64 payload'));
+                return;
+            }
             conn.sobject('ContentVersion').create({
                 PathOnClient : fileName,
                 VersionData : data
               }, (err, response) => {
                 if (err || !response.success) { 
                     console.error(err, response); 
-                    reject(err);
+                    reject(err || new Error('ContentVersion create failed'));
+                    return;
                 }
                 console.log('work 2: ')
                 conn.sobject("ContentVersion").retrieve(response.id, function(err, cv) {
                     if (err) { 
-                      reject(err)
-                      return console.error('err ->> ', err); 
+                      console.error('err ->> ', err);
+                      reject(err);
+                      return;
                     }
           
                     conn.sobject('ContentDocumentLink').create({
@@ -173,8 +177,9 @@ const uploadContentVersion = ({ fileName, fileBase64, sourceId }) => {
                       Visibility: "AllUsers"
                     }, function(err2, cdl){
                       if (err2) { 
-                        reject(err2)
-                        return console.error('err222 => ', JSON.stringify(err2) + 'test');
+                        console.error('err222 => ', JSON.stringify(err2) + 'test');
+                        reject(err2);
+                        return;
                        }
                       resolve(cdl);
                     })

@@ -63,7 +63,7 @@ router.post('/routes/uploadFile', (req, res) => {
     console.log('req.body upsert routes: ', req.body)
     uploadContentVersion(req.body)
     .then(response => res.status(201).json({ record: response, message: 'The record has been created successfully!' }))
-    .catch(error => res.json({ error: error }))
+    .catch(error => res.status(500).json({ error: error }))
 })
 
 router.post('/routes/notify', (req, res) => {

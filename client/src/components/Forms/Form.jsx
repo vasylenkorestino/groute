@@ -53,7 +53,7 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
             let base64files = []
             files && files.forEach(f => {
                 let file = f[0]
-                let base64_response = `data:application/jpeg;base64,${file}`
+                let base64_response = `data:image/jpeg;base64,${file}`
                 base64files.push(base64_response)
             })
             console.log('base64files ; ',base64files)
@@ -78,26 +78,44 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
         console.log('form : ', form)
     }
 
-    const handleUpsert = () => {
+    // Saves route fields, then awaits photo uploads before closing the modal.
+    const handleUpsert = async () => {
         if(form.hasOwnProperty('password') && form?.password == ''){
             setRecordWithoutPasswordKey();
         }
 
-        upsertRecord(endpoint, form)
-        .then(response => response.status === 201 ? toast.success(response.data.message) : toast.error('Something went wrong'))
-        .then(() => {
-            if(imageUrls.length){
-                imageUrls.forEach(imageUrl => {
-                    uploadPhoto(endpoint, { fileName: record.Account_Name__c  + '.jpeg', fileBase64: imageUrl, sourceId: record.AccountId__c }).then(response => {
-                        console.log('response handleSetImageUrl : ', response)
-                    }).catch(error => {
-                        console.error('error : ', error )
-                    })
-                })
+        try {
+            const response = await upsertRecord(endpoint, form)
+            if (response.status !== 201) {
+                toast.error('Something went wrong')
+                return
             }
-        })
-        .catch(error => toast.error(error))
-        .finally(() => close())
+            toast.success(response.data.message)
+
+            if (imageUrls.length) {
+                const sourceId = record.Account__c || record.AccountId__c
+                const results = await Promise.allSettled(
+                    imageUrls.map(imageUrl =>
+                        uploadPhoto(endpoint, {
+                            fileName: record.Account_Name__c + '.jpeg',
+                            fileBase64: imageUrl,
+                            sourceId
+                        })
+                    )
+                )
+                const failed = results.filter(r => r.status === 'rejected')
+                if (failed.length) {
+                    console.error('photo upload errors : ', failed)
+                    toast.error(`${failed.length} photo(s) failed to upload`)
+                    return
+                }
+                toast.success('Photo(s) uploaded successfully')
+            }
+            close()
+        } catch (error) {
+            console.error('error : ', error)
+            toast.error(error?.message || 'Something went wrong')
+        }
     }
 
     const [changePassword, setChangePassword] = useState(false);
@@ -161,36 +179,57 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
         document.getElementById('fileInput').click();
     }
 
+    // Detects HEIC/HEIF by MIME or file extension (case-insensitive).
+    const isHeicOrHeif = (file) => {
+        const type = (file.type || '').toLowerCase()
+        const name = (file.name || '').toLowerCase()
+        return type === 'image/heic' || type === 'image/heif'
+            || name.endsWith('.heic') || name.endsWith('.heif')
+    }
+
+    // Converts HEIC/HEIF when needed, then always compresses to JPEG for Salesforce upload.
+    const normalizeImageFile = async (file) => {
+        let normalized = file
+        if (isHeicOrHeif(file)) {
+            const converted = await heic2any({
+                blob: file,
+                toType: 'image/jpeg',
+                quality: 0.9
+            })
+            const blob = Array.isArray(converted) ? converted[0] : converted
+            const baseName = file.name.replace(/\.(heic|heif)$/i, '') || 'photo'
+            normalized = new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' })
+        }
+        return compressImageToBase64(normalized, 1200, 0.6)
+    }
+
     const handleUploadFile = async (event) => {
         console.log('handleUploadFile : ')
-        let file = event.target.files[0];
-        if (!file) return;
+        const input = event.target
+        let file = input.files[0]
+        if (!file) return
 
-        if (file.type === 'image/heic' || file.name.endsWith('.heic')) {
-            const blob = await heic2any({
-                blob: file,
-                toType: "image/jpeg",
-                quality: 0.9
-            });
-            file = new File([blob], file.name.replace('.heic', '.jpg'), { type: 'image/jpeg' });
+        const mime = (file.type || '').toLowerCase()
+        const isImage = mime.startsWith('image/') || isHeicOrHeif(file)
+        if (!isImage) {
+            toast.error('Please select an image file')
+            input.value = ''
+            return
+        }
 
-            const compressedBase64 = await compressImageToBase64(file, 1200, 0.6);
-            console.log('compressedBase64:', compressedBase64);
-            setImageUrls([...imageUrls, compressedBase64])
-        } else {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result
-                console.log('Base64 string:', base64);
-                setImageUrls([...imageUrls, base64])
-            };
-            reader.readAsDataURL(file);
+        try {
+            const compressedBase64 = await normalizeImageFile(file)
+            console.log('compressedBase64:', compressedBase64)
+            setImageUrls(prev => [...prev, compressedBase64])
+        } catch (error) {
+            console.error('error normalizeImageFile : ', error)
+            toast.error('Failed to process photo. Please try again.')
+        } finally {
+            input.value = ''
         }
     }
 
-    // file: File from <input type="file">
-    // maxWidth: max width in px (image will be scaled down if larger)
-    // quality: 0–1 (only works for JPEG/WebP)
+    // Compresses a File to a JPEG data URL (scaled to maxWidth).
     const compressImageToBase64 = async (file, maxWidth = 1280, quality = 0.7) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -251,6 +290,7 @@ const InputForm = ({ endpoint, columns, close, title, mode, hasImages }) => {
                                 <input
                                     type="file"
                                     id="fileInput"
+                                    accept="image/*"
                                     style={{ display: 'none' }}
                                     onChange={handleUploadFile}
                                 />

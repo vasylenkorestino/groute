@@ -108,6 +108,7 @@ export const useData = () => {
         })
     }
 
+    // Uploads a photo; rejects on HTTP errors or a 200 body that still contains error.
     const uploadPhoto = (endpoint, data) => {
         return new Promise( async (resolve, reject) => {
             setIsReady(false)
@@ -115,6 +116,11 @@ export const useData = () => {
 
             await axios.post( endpoint + '/uploadFile', data, { 'Content-Type': 'application/json' })
             .then(response => {
+                if (response?.data?.error) {
+                    reject(response.data.error)
+                    setIsReady(true)
+                    return
+                }
                 resolve(response)
                 setIsReady(true)
             }).catch(error => {
